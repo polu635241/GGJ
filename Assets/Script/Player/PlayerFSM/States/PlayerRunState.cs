@@ -16,6 +16,26 @@ public class PlayerRunState : PlayerFlowState {
 
 	public override PlayerFlowState Stay (float deltaTime)
 	{
+		int? getInputDir = GetInputDir ();
+
+		if (getInputDir != null) 
+		{	
+			float degree = getInputDir.Value;
+			
+			float x_Velocity = Mathf.Sin (degree * Mathf.Deg2Rad);
+			float z_Velocity = Mathf.Cos (degree * Mathf.Deg2Rad);
+
+			Vector3 moveVelocity = new Vector3 (x_Velocity, 0, z_Velocity).normalized;
+			Vector3 processMoveVelocity = moveVelocity * PlayerSetting.MoveSpeed;
+			PlayerController.SetVelocity (processMoveVelocity);
+
+			PlayerController.SetRot (degree);
+		}
+		else
+		{
+			return GetState<PlayerIdleState> ();
+		}
+		
 		return null;
 	}
 

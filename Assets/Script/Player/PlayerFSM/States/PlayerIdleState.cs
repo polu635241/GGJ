@@ -12,10 +12,17 @@ public class PlayerIdleState : PlayerFlowState {
 	public override void Enter (PlayerFlowState prevState)
 	{
 		base.Enter (prevState);
+
+		PlayerController.MoveBreak ();
 	}
 	
 	public override PlayerFlowState Stay (float deltaTime)
 	{
+		if (GetInputDir () != null) 
+		{
+			return GetState<PlayerRunState> ();
+		}
+
 		return null;
 	}
 
