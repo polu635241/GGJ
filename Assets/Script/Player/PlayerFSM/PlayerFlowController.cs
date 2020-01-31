@@ -6,8 +6,19 @@ using UnityEngine;
 [Serializable]
 public class PlayerFlowController
 {
-	public PlayerFlowController ()
+	PlayerController playerController;
+
+	public PlayerController PlayerController
 	{
+		get
+		{
+			return playerController;
+		}
+	}
+
+	public PlayerFlowController (PlayerController playerController)
+	{
+		this.playerController = playerController;
 		playerFlowRepository = new PlayerFlowRepository (this);
 		PlayerFlowState initalState = playerFlowRepository.GetState<PlayerIdleState> ();
 		ForceChangeState<PlayerIdleState> ();

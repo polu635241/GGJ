@@ -14,7 +14,7 @@ public abstract class PlayerFlowState
 	
 	public virtual void Enter(PlayerFlowState prevState)
 	{
-		
+		flowController.PlayerController.m_Anim.Play (BindAnimationName);
 	}
 	
 	public virtual PlayerFlowState Stay (float deltaTime)
