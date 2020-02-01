@@ -12,16 +12,96 @@ public class PlusSensor : GenericEntityController
 			return proxy;
 		}
 	}
+
+	[SerializeField][ReadOnly]
+	Plus plus;
+
+	public Plus Plus
+	{
+		get
+		{
+			return plus;
+		}
+	}
+
+	public bool hasOwner;
+
+	public void SetOwner(Plus plus)
+	{
+		this.plus = plus;
+	}
+
+	[SerializeField]
+	SensorStyle sensorStyle = SensorStyle.Peace;
+
+	public SensorStyle SensorStyle
+	{
+		get
+		{
+			return sensorStyle;
+		}
+	}
 	
 	[SerializeField]
 	Transform proxy;
 	
-	public Collider[] GetCollider (int layerMask)
+	public List<Collider> GetCollider (int plusMask, int plusSensorMask)
 	{
 		Vector3 center = m_Transform.position;
 		Vector3 halfExtents = Tool.MultiV3 (m_Collider.size / 2, m_Transform.localScale);
 
-		Collider[] colls = Physics.OverlapBox (center, halfExtents, m_Transform.rotation, layerMask);
-		return colls;
+		Collider[] plusSensorColls = Physics.OverlapBox (center, halfExtents, m_Transform.rotation, plusSensorMask);
+
+		return ProcessColls (plusSensorColls);
+	}
+
+	List<Collider> ProcessColls(Collider[] plusSensorColls)
+	{
+		List<Collider> processColls = new List<Collider> ();
+		
+		Array.ForEach (plusSensorColls, coll => 
+			{
+				PlusSensor plusSensor = coll.gameObject.GetComponent<PlusSensor> ();
+
+				// layer擺錯 或者 掃到有主人的了
+				if(plusSensor != null&&!plusSensor.hasOwner)
+				{
+					PlusSensor[] bindPlusSensors = plusSensor.Plus.GetComponentsInChildren<PlusSensor>();
+
+					foreach (var bindPlusSensor in bindPlusSensors) 
+					{
+						bindPlusSensor.hasOwner = true;
+					}
+
+					bool checkResult = Check(this.sensorStyle, plusSensor.SensorStyle);
+
+					if(checkResult)
+					{
+						processColls.Add(coll);
+					}
+				}
+			});
+
+		return processColls;
+	}
+
+	bool Check(SensorStyle s1, SensorStyle s2)
+	{
+		if (s1 == SensorStyle.Positive && s2 == SensorStyle.Negative) 
+		{
+			return true;
+		}
+		 
+		if(s1 == SensorStyle.Negative && s2 == SensorStyle.Positive)
+		{
+			return true;
+		}
+
+		if(s1 == SensorStyle.Peace && s2 == SensorStyle.Peace)
+		{
+			return true;
+		}
+
+		return false;
 	}
 }

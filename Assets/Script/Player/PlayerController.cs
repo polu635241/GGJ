@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class PlayerController : GenericEntityController {
 
+	[SerializeField][ReadOnly]
+	Transform plusRoot;
+
+	public Transform PlusRoot
+	{
+		get
+		{
+			return plusRoot;
+		}
+	}
+
 	[SerializeField]
 	PlayerStyle playerStyle;
 
@@ -12,7 +23,7 @@ public class PlayerController : GenericEntityController {
 	PlayerSetting playerSetting;
 
 	[SerializeField]
-	List<PlusSensor> plusSensors = new List<PlusSensor> ();
+	Dictionary<PlusSensor,PlusStyle> plusSensors = new Dictionary<PlusSensor,PlusStyle>();
 
 	[SerializeField][ReadOnly]
 	ParticleSystem moveFX;
@@ -25,7 +36,7 @@ public class PlayerController : GenericEntityController {
 		}
 	}
 
-	public List<PlusSensor> PlusSensors
+	public Dictionary<PlusSensor,PlusStyle> PlusSensors
 	{
 		get
 		{
@@ -35,6 +46,9 @@ public class PlayerController : GenericEntityController {
 
 	[SerializeField]
 	LayerMask plusLayerMask;
+
+	[SerializeField]
+	LayerMask plusSensorLayerMask;
 
 	public PlayerSetting PlayerSetting
 	{
@@ -61,12 +75,24 @@ public class PlayerController : GenericEntityController {
 	{
 		base.Awake ();
 
+		plusRoot = new GameObject ("[PlusRoot]").transform;
+		plusRoot.SetParent (m_Transform);
+		plusRoot.localPosition = Vector3.zero;
+
 		inputReceiver = InputReceiverFactory.Get (playerStyle);
 
 		playerFlowController = new PlayerFlowController ();
 		playerFlowController.Init (this);
 
-		plusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
+		List<PlusSensor> getPlusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
+
+		plusSensors = new Dictionary<PlusSensor, PlusStyle> ();
+
+		getPlusSensors.ForEach (plusSensor=>
+			{
+				plusSensor.hasOwner = true;
+				plusSensors.Add(plusSensor,PlusStyle.none);
+			});
 
 		cacheCount = 0;
 		cacheSpeedCount = 0;
@@ -80,24 +106,24 @@ public class PlayerController : GenericEntityController {
 		moveFX.Stop ();
 	}
 
-	public Dictionary<PlusSensor,Collider> GetPlusPairs ()
+	public Dictionary<Collider,PlusSensor> GetPlusPairs ()
 	{
-		Dictionary<PlusSensor, Collider> pair = new Dictionary<PlusSensor, Collider> ();
+		Dictionary<Collider,PlusSensor> pair = new Dictionary<Collider,PlusSensor> ();
 
-		plusSensors.ForEach (plusSensor=>
+		plusSensors.ForEach ((plusSensor,plusStyle)=>
 			{
-				Collider[] colls = plusSensor.GetCollider(plusLayerMask.value);
+				List<Collider> colls = plusSensor.GetCollider(plusLayerMask.value, plusSensorLayerMask.value);
 
-				Array.ForEach(colls, (coll)=>
+				colls.ForEach((coll)=>
 					{
-						pair.Add(plusSensor,coll);
+						pair.Add(coll, plusSensor);
 					});
 			});
 
 		return pair;
 	}
 
-	public void GetPlus(PlusStyle plusStyle)
+	public void GetPlus(PlusStyle plusStyle, Vector3 attachProxyPos)
 	{
 		plusStyles.Add (plusStyle);
 
@@ -110,6 +136,12 @@ public class PlayerController : GenericEntityController {
 				break;
 			}
 		}
+
+		PlusCacheCount ();
+
+		GameObject plusFxPrefab = playerSetting.GetFX (plusStyle);
+		GameObject plusFxGo = MonoBehaviour.Instantiate (plusFxPrefab);
+		plusFxGo.transform.position = attachProxyPos;
 	}
 
 	List<PlusStyle> plusStyles = new List<PlusStyle> ();

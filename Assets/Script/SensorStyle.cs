@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlusStyle
+public enum SensorStyle
 {
-	speed,
-	hp,
-	atk,
-	none
+	Positive,
+	Negative,
+	Peace
 }
