@@ -59,4 +59,13 @@ public class PlayerSetting : ScriptableObject
 			return keepSpeedScale;
 		}
 	}
+
+	[SerializeField]
+	GameObject speedFxPrefab;
+
+	[SerializeField]
+	GameObject hpFxPrefab;
+
+	[SerializeField]
+	GameObject atkFxPrefab;
 }
