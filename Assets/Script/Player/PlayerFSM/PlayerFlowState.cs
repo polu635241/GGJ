@@ -138,8 +138,6 @@ public abstract class PlayerFlowState
 
 	protected void CachePlus ()
 	{
-		List<PlusSensor> removePlusSensors = new List<PlusSensor> ();
-		
 		Dictionary<PlusSensor,Collider> plusPairs = PlayerController.GetPlusPairs ();
 
 		Dictionary<PlusSensor,Collider> needProcessPairs = new Dictionary<PlusSensor, Collider> ();

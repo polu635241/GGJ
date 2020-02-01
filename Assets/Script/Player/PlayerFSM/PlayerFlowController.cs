@@ -20,7 +20,6 @@ public class PlayerFlowController
 	{
 		this.playerController = playerController;
 		playerFlowRepository = new PlayerFlowRepository (this);
-		PlayerFlowState initalState = playerFlowRepository.GetState<PlayerIdleState> ();
 		ForceChangeState<PlayerIdleState> ();
 	}
 	
