@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: Player_1
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  attachTime: 0.5
+  cachePlusTime: 0.5
   reduceSpeedScale: 0.08
   keepSpeedScale: 0.5
