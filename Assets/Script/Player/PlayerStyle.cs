@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum PlayerStyle 
 {
-	LeftPlayer
+	LeftPlayer,RightPlayer,MidPlayer
 }

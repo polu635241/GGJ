@@ -2,30 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeftPlayerInputReceiver : InputReceiver 
+public class MidPlayerInputReceiver : InputReceiver 
 {
 	public override bool Right ()
 	{
-		return Input.GetKey (KeyCode.D);
+		return Input.GetKey (KeyCode.RightArrow);
 	}
 
 	public override bool Left ()
 	{
-		return Input.GetKey (KeyCode.A);
+		return Input.GetKey (KeyCode.LeftArrow);
 	}
 
 	public override bool Up ()
 	{
-		return Input.GetKey (KeyCode.W);
+		return Input.GetKey (KeyCode.UpArrow);
 	}
 
 	public override bool Down ()
 	{
-		return Input.GetKey (KeyCode.S);
+		return Input.GetKey (KeyCode.DownArrow);
 	}
 
 	public override bool CatchPlus ()
 	{
-		return Input.GetKeyDown (KeyCode.Q);
+		return Input.GetKeyDown (KeyCode.RightShift);
 	}
 }
