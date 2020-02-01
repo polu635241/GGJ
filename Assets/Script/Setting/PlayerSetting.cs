@@ -39,6 +39,17 @@ public class PlayerSetting : ScriptableObject
 	}
 
 	[SerializeField]
+	float plusSpeedScale;
+
+	public float PlusSpeedScale
+	{
+		get
+		{
+			return plusSpeedScale;
+		}
+	}
+
+	[SerializeField]
 	float keepSpeedScale;
 
 	public float KeepSpeedScale

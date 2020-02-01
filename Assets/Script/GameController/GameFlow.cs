@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum GameFlow
 {
-	Standby,CatchPlusFight
+	Standby,Load,CatchPlus,Fight,Reset
 }

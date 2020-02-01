@@ -52,7 +52,8 @@ public class PlayerController : GenericEntityController {
 
 		inputReceiver = InputReceiverFactory.Get (playerStyle);
 
-		playerFlowController = new PlayerFlowController (this);
+		playerFlowController = new PlayerFlowController ();
+		playerFlowController.Init (this);
 
 		plusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
 

@@ -16,11 +16,10 @@ public class PlayerFlowController
 		}
 	}
 
-	public PlayerFlowController (PlayerController playerController)
+	public void Init (PlayerController playerController)
 	{
 		this.playerController = playerController;
 		playerFlowRepository = new PlayerFlowRepository (this);
-		PlayerFlowState initalState = playerFlowRepository.GetState<PlayerIdleState> ();
 		ForceChangeState<PlayerIdleState> ();
 	}
 	
