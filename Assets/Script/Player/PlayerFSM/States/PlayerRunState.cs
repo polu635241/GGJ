@@ -16,6 +16,11 @@ public class PlayerRunState : PlayerFlowState {
 
 	public override PlayerFlowState Stay (float deltaTime)
 	{
+		if (InputReceiver.Jump ()) 
+		{
+			CachePlus ();
+		}
+		
 		int? getInputDir = GetInputDir ();
 
 		if (getInputDir != null) 
@@ -26,16 +31,17 @@ public class PlayerRunState : PlayerFlowState {
 			float z_Velocity = Mathf.Cos (degree * Mathf.Deg2Rad);
 
 			Vector3 moveVelocity = new Vector3 (x_Velocity, 0, z_Velocity).normalized;
-			Vector3 processMoveVelocity = moveVelocity * PlayerSetting.MoveSpeed;
-			PlayerController.SetVelocity (processMoveVelocity);
 
-			PlayerController.SetRot (degree);
+			float moveSpeed = PlayerController.CurrentMoveSpeed;
+
+			Vector3 processMoveVelocity = moveVelocity * moveSpeed;
+			PlayerController.SetVelocity (processMoveVelocity);
 		}
 		else
 		{
 			return GetState<PlayerIdleState> ();
 		}
-		
+
 		return null;
 	}
 

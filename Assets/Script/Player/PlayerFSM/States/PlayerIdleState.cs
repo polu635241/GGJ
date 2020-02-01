@@ -18,6 +18,11 @@ public class PlayerIdleState : PlayerFlowState {
 	
 	public override PlayerFlowState Stay (float deltaTime)
 	{
+		if (InputReceiver.Jump ()) 
+		{
+			CachePlus ();
+		}
+		
 		if (GetInputDir () != null) 
 		{
 			return GetState<PlayerRunState> ();

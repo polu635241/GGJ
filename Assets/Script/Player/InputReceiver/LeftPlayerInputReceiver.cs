@@ -26,6 +26,6 @@ public class LeftPlayerInputReceiver : InputReceiver
 
 	public override bool Jump ()
 	{
-		return Input.GetKey (KeyCode.Space);
+		return Input.GetKeyDown (KeyCode.Space);
 	}
 }

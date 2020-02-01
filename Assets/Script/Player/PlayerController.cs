@@ -12,7 +12,15 @@ public class PlayerController : GenericEntityController {
 	PlayerSetting playerSetting;
 
 	[SerializeField]
-	List<PlusSensor> plusSensor = new List<PlusSensor> ();
+	List<PlusSensor> plusSensors = new List<PlusSensor> ();
+
+	public List<PlusSensor> PlusSensors
+	{
+		get
+		{
+			return plusSensors;
+		}
+	}
 
 	[SerializeField]
 	LayerMask plusLayerMask;
@@ -46,7 +54,28 @@ public class PlayerController : GenericEntityController {
 
 		playerFlowController = new PlayerFlowController (this);
 
-		plusSensor = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
+		plusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
+
+		cacheCount = 0;
+
+		currentMoveSpeed = playerSetting.MoveSpeed;
+	}
+
+	public Dictionary<PlusSensor,Collider> GetPlusPairs ()
+	{
+		Dictionary<PlusSensor, Collider> pair = new Dictionary<PlusSensor, Collider> ();
+
+		plusSensors.ForEach (plusSensor=>
+			{
+				Collider[] colls = plusSensor.GetCollider(plusLayerMask.value);
+
+				Array.ForEach(colls, (coll)=>
+					{
+						pair.Add(plusSensor,coll);
+					});
+			});
+
+		return pair;
 	}
 
 	void Update()
@@ -68,38 +97,53 @@ public class PlayerController : GenericEntityController {
 	[SerializeField]
 	GameObject other;
 
-	[ContextMenu("EatOther")]
-	void EatOther()
+	[SerializeField][ReadOnly]
+	int cacheCount;
+
+	public void PlusCacheCount ()
 	{
-		BoxCollider otherColl = other.GetComponent<BoxCollider> ();
-		BoxCollider newCollider = m_Go.AddComponent<BoxCollider> ();
-		newCollider.center = otherColl.center + other.transform.position - m_Transform.position;
-		newCollider.size = otherColl.size;
+		cacheCount++;
 
-		Destroy (otherColl);
+		float reduceScale = cacheCount * playerSetting.ReduceSpeedScale;
 
-//		newCollider.enabled = false;
-//		newCollider.enabled = true;
+		float keepSpeedScale = PlayerSetting.KeepSpeedScale;
+
+		float processSpeedScale = (1 - reduceScale);
+
+		if (processSpeedScale < keepSpeedScale) 
+		{
+			processSpeedScale = keepSpeedScale;
+		}
+
+		currentMoveSpeed = playerSetting.MoveSpeed * processSpeedScale;
 	}
 
-	[ContextMenu("GetInfo")]
-	void GetInfo ()
+	public void TransferColl (BoxCollider coll)
 	{
-		Vector3 center = m_Transform.position;
-		Vector3 halfExtents = Tool.MultiV3 (m_Collider.size / 2, m_Transform.localScale);
+		BoxCollider newColl = m_Go.AddComponent<BoxCollider> ();
 
-		Collider[] colls = Physics.OverlapBox (center, halfExtents, m_Transform.rotation);
+		Transform collTransform = coll.transform;
 
-		Array.ForEach (colls, coll=>
-			{
-				print (coll.gameObject.name);
-			});
+		Vector3 deltaPos = collTransform.position - m_Transform.position;
+
+		Vector3 center = deltaPos + Tool.MultiV3 (coll.center, collTransform.lossyScale);
+
+		Vector3 size = Tool.MultiV3 (collTransform.lossyScale, coll.size);
+
+		newColl.center = center;
+		newColl.size = size;
+
+		Destroy (coll);
 	}
 
-	void OnCollisionEnter(Collision coll)
+	[SerializeField][ReadOnly]
+	float currentMoveSpeed;
+
+	public float  CurrentMoveSpeed
 	{
-//		string enterName = coll.gameObject.name;
-//
-//		UnityEngine.Debug.LogError(enterName);
+		get
+		{
+			return currentMoveSpeed;
+		}
 	}
 }

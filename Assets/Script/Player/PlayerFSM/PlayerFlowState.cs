@@ -126,4 +126,54 @@ public abstract class PlayerFlowState
 			}
 		}
 	}
+
+	protected void CachePlus ()
+	{
+		List<PlusSensor> removePlusSensors = new List<PlusSensor> ();
+		
+		Dictionary<PlusSensor,Collider> plusPairs = PlayerController.GetPlusPairs ();
+
+		Dictionary<PlusSensor,Collider> needProcessPairs = new Dictionary<PlusSensor, Collider> ();
+
+		plusPairs.ForEach ((plusSensor, BoxCollider)=>
+			{
+				//同一個物件被多個感應器碰到擇一即可
+				if(!needProcessPairs.ContainsValue(BoxCollider))
+				{
+					needProcessPairs.Add(plusSensor,BoxCollider);
+
+					BoxCollider.gameObject.layer = LayerMask.NameToLayer(Layers.AttachPlus);
+
+					bool removePlusSensorSuccess= PlayerController.PlusSensors.Remove (plusSensor);
+
+					if(!removePlusSensorSuccess)
+					{
+						Debug.LogError ("remove fail");
+					}
+				}
+			});
+
+		EatFinish (needProcessPairs);
+	}
+
+	void EatFinish(Dictionary<PlusSensor,Collider> needProcessPairs)
+	{
+		needProcessPairs.ForEach ((originPlusSensor,eatTargetCollider)=>
+			{
+				PlusSensor eatTargetPlusSensor = eatTargetCollider.GetComponentInChildren<PlusSensor> ();
+				
+				PlayerController.PlusSensors.Add (eatTargetPlusSensor);
+
+				Transform eatTargetTransform = eatTargetCollider.transform;
+				eatTargetTransform.SetParent (PlayerController.m_Transform);
+
+				eatTargetTransform.position = originPlusSensor.Proxy.position;
+
+				PlayerController.PlusCacheCount ();
+
+				BoxCollider eatTargetBoxCollider = (BoxCollider)eatTargetCollider;
+
+				PlayerController.TransferColl(eatTargetBoxCollider);
+			});
+	}
 }
