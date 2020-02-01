@@ -17,13 +17,35 @@ public class PlayerSetting : ScriptableObject
 	}
 
 	[SerializeField]
-	float jumpForce;
+	float cachePlusTime;
 
-	public float JumpForce
+	public float CachePlusTime
 	{
 		get
 		{
-			return jumpForce;
+			return cachePlusTime;
+		}
+	}
+
+	[SerializeField]
+	float reduceSpeedScale;
+
+	public float ReduceSpeedScale
+	{
+		get
+		{
+			return reduceSpeedScale;
+		}
+	}
+
+	[SerializeField]
+	float keepSpeedScale;
+
+	public float KeepSpeedScale
+	{
+		get
+		{
+			return keepSpeedScale;
 		}
 	}
 }

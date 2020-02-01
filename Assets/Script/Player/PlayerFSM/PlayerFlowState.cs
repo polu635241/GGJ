@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MEC;
 
 public abstract class PlayerFlowState
 {
@@ -28,6 +29,14 @@ public abstract class PlayerFlowState
 		get
 		{
 			return PlayerController.PlayerSetting;
+		}
+	}
+
+	protected GameFlowController GameFlowController
+	{
+		get
+		{
+			return GameFlowController.Instance;
 		}
 	}
 
@@ -125,5 +134,88 @@ public abstract class PlayerFlowState
 				return null;
 			}
 		}
+	}
+
+	protected void CachePlus ()
+	{
+		List<PlusSensor> removePlusSensors = new List<PlusSensor> ();
+		
+		Dictionary<PlusSensor,Collider> plusPairs = PlayerController.GetPlusPairs ();
+
+		Dictionary<PlusSensor,Collider> needProcessPairs = new Dictionary<PlusSensor, Collider> ();
+
+		plusPairs.ForEach ((plusSensor, BoxCollider)=>
+			{
+				//同一個物件被多個感應器碰到擇一即可
+				if(!needProcessPairs.ContainsValue(BoxCollider))
+				{
+					needProcessPairs.Add(plusSensor,BoxCollider);
+
+					BoxCollider.gameObject.layer = LayerMask.NameToLayer(Layers.AttachPlus);
+
+					bool removePlusSensorSuccess= PlayerController.PlusSensors.Remove (plusSensor);
+
+					if(!removePlusSensorSuccess)
+					{
+						Debug.LogError ("remove fail");
+					}
+
+					Timing.RunCoroutine(CatchPlus (needProcessPairs));
+				}
+			});
+	}
+
+	IEnumerator<float> CatchPlus(Dictionary<PlusSensor,Collider> needProcessPairs)
+	{
+		float beginTime = Time.time;
+		float needTime = PlayerSetting.CachePlusTime;
+		float remainingTime = needTime;
+		float finishTime = beginTime + needTime;
+
+		while (remainingTime > 0 && GameFlowController.GameFlow == GameFlow.CatchPlusFight)
+		{
+			float progress = (1 - remainingTime / needTime);
+
+			LerpPlusEntityPos (needProcessPairs, progress);
+
+			yield return Timing.WaitForOneFrame;
+			remainingTime = finishTime - Time.time;
+		}
+
+		EatFinish (needProcessPairs);
+	}
+
+	void EatFinish(Dictionary<PlusSensor,Collider> needProcessPairs)
+	{
+		needProcessPairs.ForEach ((originPlusSensor,eatTargetCollider)=>
+			{
+				PlusSensor eatTargetPlusSensor = eatTargetCollider.GetComponentInChildren<PlusSensor> ();
+				
+				PlayerController.PlusSensors.Add (eatTargetPlusSensor);
+
+				Transform eatTargetTransform = eatTargetCollider.transform;
+				eatTargetTransform.SetParent (PlayerController.m_Transform);
+
+				eatTargetTransform.position = originPlusSensor.Proxy.position;
+
+				PlayerController.PlusCacheCount ();
+
+				BoxCollider eatTargetBoxCollider = (BoxCollider)eatTargetCollider;
+
+				PlayerController.TransferColl(eatTargetBoxCollider);
+			});
+	}
+
+	void LerpPlusEntityPos(Dictionary<PlusSensor,Collider> needProcessPairs, float _value)
+	{
+		needProcessPairs.ForEach ((originPlusSensor,eatTargetCollider)=>
+			{
+				Transform eatTargetTransform = eatTargetCollider.transform;
+
+				eatTargetTransform.position = originPlusSensor.Proxy.position;
+
+				Vector3.Lerp(eatTargetTransform.position , originPlusSensor.Proxy.position,_value);
+
+			});
 	}
 }

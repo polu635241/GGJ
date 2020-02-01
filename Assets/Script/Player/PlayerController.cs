@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,20 @@ public class PlayerController : GenericEntityController {
 
 	[SerializeField][ReadOnly]
 	PlayerSetting playerSetting;
+
+	[SerializeField]
+	List<PlusSensor> plusSensors = new List<PlusSensor> ();
+
+	public List<PlusSensor> PlusSensors
+	{
+		get
+		{
+			return plusSensors;
+		}
+	}
+
+	[SerializeField]
+	LayerMask plusLayerMask;
 
 	public PlayerSetting PlayerSetting
 	{
@@ -38,6 +53,29 @@ public class PlayerController : GenericEntityController {
 		inputReceiver = InputReceiverFactory.Get (playerStyle);
 
 		playerFlowController = new PlayerFlowController (this);
+
+		plusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
+
+		cacheCount = 0;
+
+		currentMoveSpeed = playerSetting.MoveSpeed;
+	}
+
+	public Dictionary<PlusSensor,Collider> GetPlusPairs ()
+	{
+		Dictionary<PlusSensor, Collider> pair = new Dictionary<PlusSensor, Collider> ();
+
+		plusSensors.ForEach (plusSensor=>
+			{
+				Collider[] colls = plusSensor.GetCollider(plusLayerMask.value);
+
+				Array.ForEach(colls, (coll)=>
+					{
+						pair.Add(plusSensor,coll);
+					});
+			});
+
+		return pair;
 	}
 
 	void Update()
@@ -56,10 +94,56 @@ public class PlayerController : GenericEntityController {
 		m_Rigidbody.velocity = velocity;
 	}
 
-	public void SetRot (float degree)
-	{
-		Quaternion newRot = Quaternion.Euler (0, degree, 0);
+	[SerializeField]
+	GameObject other;
 
-		m_Transform.rotation = newRot;
+	[SerializeField][ReadOnly]
+	int cacheCount;
+
+	public void PlusCacheCount ()
+	{
+		cacheCount++;
+
+		float reduceScale = cacheCount * playerSetting.ReduceSpeedScale;
+
+		float keepSpeedScale = PlayerSetting.KeepSpeedScale;
+
+		float processSpeedScale = (1 - reduceScale);
+
+		if (processSpeedScale < keepSpeedScale) 
+		{
+			processSpeedScale = keepSpeedScale;
+		}
+
+		currentMoveSpeed = playerSetting.MoveSpeed * processSpeedScale;
+	}
+
+	public void TransferColl (BoxCollider coll)
+	{
+		BoxCollider newColl = m_Go.AddComponent<BoxCollider> ();
+
+		Transform collTransform = coll.transform;
+
+		Vector3 deltaPos = collTransform.position - m_Transform.position;
+
+		Vector3 center = deltaPos + Tool.MultiV3 (coll.center, collTransform.lossyScale);
+
+		Vector3 size = Tool.MultiV3 (collTransform.lossyScale, coll.size);
+
+		newColl.center = center;
+		newColl.size = size;
+
+		Destroy (coll);
+	}
+
+	[SerializeField][ReadOnly]
+	float currentMoveSpeed;
+
+	public float  CurrentMoveSpeed
+	{
+		get
+		{
+			return currentMoveSpeed;
+		}
 	}
 }
