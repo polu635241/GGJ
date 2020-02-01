@@ -31,6 +31,17 @@ public class GameController : MonoBehaviour
 	[SerializeField][ReadOnly]
 	GameFlowController gameFlowController;
 
+	[SerializeField]
+	PlayerSetting playerSetting;
+
+	public PlayerSetting PlayerSetting
+	{
+		get
+		{
+			return playerSetting;
+		}
+	}
+
 //	[SerializeField]
 //	Button resetBtn;
 

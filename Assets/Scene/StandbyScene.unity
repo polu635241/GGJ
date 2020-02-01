@@ -476,6 +476,7 @@ MonoBehaviour:
   - {fileID: 69189754}
   gameFlowController:
     currentStateInfo: StandbyState
+  playerSetting: {fileID: 11400000, guid: d81fee3111de3f24bafc8c0905f84673, type: 2}
 --- !u!1 &1907570900
 GameObject:
   m_ObjectHideFlags: 0

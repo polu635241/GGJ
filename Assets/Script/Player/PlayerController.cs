@@ -19,9 +19,6 @@ public class PlayerController : GenericEntityController {
 	[SerializeField]
 	PlayerStyle playerStyle;
 
-	[SerializeField][ReadOnly]
-	PlayerSetting playerSetting;
-
 	[SerializeField]
 	Dictionary<PlusSensor,PlusStyle> plusSensors = new Dictionary<PlusSensor,PlusStyle>();
 
@@ -50,14 +47,6 @@ public class PlayerController : GenericEntityController {
 	[SerializeField]
 	LayerMask plusSensorLayerMask;
 
-	public PlayerSetting PlayerSetting
-	{
-		get
-		{
-			return playerSetting;
-		}
-	}
-
 	[SerializeField][ReadOnly]
 	PlayerFlowController playerFlowController;
 
@@ -68,6 +57,14 @@ public class PlayerController : GenericEntityController {
 		get
 		{
 			return inputReceiver;
+		}
+	}
+
+	public PlayerSetting PlayerSetting
+	{
+		get
+		{
+			return GameController.Instance.PlayerSetting;
 		}
 	}
 
@@ -99,7 +96,7 @@ public class PlayerController : GenericEntityController {
 
 		plusStyles = new List<PlusStyle> ();
 
-		currentMoveSpeed = playerSetting.MoveSpeed;
+		currentMoveSpeed = PlayerSetting.MoveSpeed;
 
 		moveFX = this.GetComponentInChildren<ParticleSystem> ();
 
@@ -139,7 +136,7 @@ public class PlayerController : GenericEntityController {
 
 		PlusCacheCount ();
 
-		GameObject plusFxPrefab = playerSetting.GetFX (plusStyle);
+		GameObject plusFxPrefab = PlayerSetting.GetFX (plusStyle);
 		GameObject plusFxGo = MonoBehaviour.Instantiate (plusFxPrefab);
 		plusFxGo.transform.position = attachProxyPos;
 	}
@@ -179,9 +176,9 @@ public class PlayerController : GenericEntityController {
 
 	void FlushSpeed()
 	{
-		float reduceScale = cacheCount * playerSetting.ReduceSpeedScale;
+		float reduceScale = cacheCount * PlayerSetting.ReduceSpeedScale;
 
-		float plusScale = cacheSpeedCount * playerSetting.ReduceSpeedScale;
+		float plusScale = cacheSpeedCount * PlayerSetting.ReduceSpeedScale;
 
 		float keepSpeedScale = PlayerSetting.KeepSpeedScale;
 
@@ -192,7 +189,7 @@ public class PlayerController : GenericEntityController {
 			processSpeedScale = keepSpeedScale;
 		}
 
-		currentMoveSpeed = playerSetting.MoveSpeed * processSpeedScale;
+		currentMoveSpeed = PlayerSetting.MoveSpeed * processSpeedScale;
 	}
 
 	public void TransferColl (BoxCollider coll)
