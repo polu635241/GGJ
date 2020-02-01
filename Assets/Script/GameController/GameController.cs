@@ -40,6 +40,12 @@ public class GameController : MonoBehaviour
 	// Use this for initialization
 	public void Awake () 
 	{
+		if (Instance != null) 
+		{
+			Destroy (this.gameObject);
+			return;
+		}
+		
 		Instance = this;
 		DontDestroyOnLoad (this.gameObject);
 		gameFlowController = new GameFlowController ();
@@ -53,7 +59,7 @@ public class GameController : MonoBehaviour
 		gameFlowController.Stay (deltaTime);
 	}
 
-	public void Reset()
+	public void _Reset()
 	{	
 		UIs.ForEach (UI=>
 			{

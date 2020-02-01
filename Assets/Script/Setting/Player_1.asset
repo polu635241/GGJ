@@ -17,3 +17,9 @@ MonoBehaviour:
   reduceSpeedScale: 0.08
   plusSpeedScale: 0.18
   keepSpeedScale: 0.5
+  speedFxPrefab: {fileID: 2438400585618800873, guid: a404d72da1b850f4cb664b3ec647e8d5,
+    type: 3}
+  hpFxPrefab: {fileID: 5462196633053110000, guid: 918715025a293ee4fa5cb4c30ea2ce06,
+    type: 3}
+  atkFxPrefab: {fileID: 2074185463804129306, guid: 4df62282b467e324f826eefcc5e74f7f,
+    type: 3}

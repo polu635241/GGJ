@@ -12,6 +12,7 @@ public class PlayerRunState : PlayerFlowState {
 	public override void Enter (PlayerFlowState prevState)
 	{
 		base.Enter (prevState);
+		PlayerController.MoveFX.Play ();
 	}
 
 	public override PlayerFlowState Stay (float deltaTime)
@@ -43,6 +44,13 @@ public class PlayerRunState : PlayerFlowState {
 		}
 
 		return null;
+	}
+
+	public override void Exit ()
+	{
+		base.Exit ();
+
+		PlayerController.MoveFX.Stop ();
 	}
 
 	protected override string BindAnimationName 

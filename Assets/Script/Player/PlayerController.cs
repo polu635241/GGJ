@@ -14,6 +14,17 @@ public class PlayerController : GenericEntityController {
 	[SerializeField]
 	List<PlusSensor> plusSensors = new List<PlusSensor> ();
 
+	[SerializeField][ReadOnly]
+	ParticleSystem moveFX;
+
+	public ParticleSystem MoveFX
+	{
+		get
+		{
+			return moveFX;
+		}
+	}
+
 	public List<PlusSensor> PlusSensors
 	{
 		get
@@ -58,8 +69,15 @@ public class PlayerController : GenericEntityController {
 		plusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
 
 		cacheCount = 0;
+		cacheSpeedCount = 0;
+
+		plusStyles = new List<PlusStyle> ();
 
 		currentMoveSpeed = playerSetting.MoveSpeed;
+
+		moveFX = this.GetComponentInChildren<ParticleSystem> ();
+
+		moveFX.Stop ();
 	}
 
 	public Dictionary<PlusSensor,Collider> GetPlusPairs ()
@@ -78,6 +96,23 @@ public class PlayerController : GenericEntityController {
 
 		return pair;
 	}
+
+	public void GetPlus(PlusStyle plusStyle)
+	{
+		plusStyles.Add (plusStyle);
+
+		switch(plusStyle)
+		{
+			case PlusStyle.speed:
+			{
+				cacheSpeedCount++;
+				FlushSpeed ();
+				break;
+			}
+		}
+	}
+
+	List<PlusStyle> plusStyles = new List<PlusStyle> ();
 
 	void Update()
 	{
@@ -101,15 +136,24 @@ public class PlayerController : GenericEntityController {
 	[SerializeField][ReadOnly]
 	int cacheCount;
 
+	[SerializeField][ReadOnly]
+	int cacheSpeedCount;
+
 	public void PlusCacheCount ()
 	{
 		cacheCount++;
+		FlushSpeed ();
+	}
 
+	void FlushSpeed()
+	{
 		float reduceScale = cacheCount * playerSetting.ReduceSpeedScale;
+
+		float plusScale = cacheSpeedCount * playerSetting.ReduceSpeedScale;
 
 		float keepSpeedScale = PlayerSetting.KeepSpeedScale;
 
-		float processSpeedScale = (1 - reduceScale);
+		float processSpeedScale = (1 - reduceScale) + plusScale;
 
 		if (processSpeedScale < keepSpeedScale) 
 		{

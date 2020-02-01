@@ -6,22 +6,22 @@ public class RightPlayerInputReceiver : InputReceiver
 {
 	public override bool Right ()
 	{
-		return Input.GetKey (KeyCode.Alpha6);
+		return Input.GetKey (KeyCode.Keypad6);
 	}
 
 	public override bool Left ()
 	{
-		return Input.GetKey (KeyCode.Alpha4);
+		return Input.GetKey (KeyCode.Keypad4);
 	}
 
 	public override bool Up ()
 	{
-		return Input.GetKey (KeyCode.Alpha8);
+		return Input.GetKey (KeyCode.Keypad8);
 	}
 
 	public override bool Down ()
 	{
-		return Input.GetKey (KeyCode.Alpha2);
+		return Input.GetKey (KeyCode.Keypad2);
 	}
 
 	public override bool CatchPlus ()
