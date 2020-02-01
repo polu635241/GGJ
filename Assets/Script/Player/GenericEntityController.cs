@@ -39,9 +39,9 @@ public class GenericEntityController : MonoBehaviour {
 		}
 	}
 
-	Collider m_collider;
+	BoxCollider m_collider;
 
-	public Collider m_Collider
+	public BoxCollider m_Collider
 	{
 		get
 		{
@@ -64,7 +64,7 @@ public class GenericEntityController : MonoBehaviour {
 		m_go = this.gameObject;
 		m_transform = m_go.transform;
 		m_rigidbody = m_go.GetComponent<Rigidbody> ();
-		m_collider = m_go.GetComponent<Collider> ();
+		m_collider = m_go.GetComponent<BoxCollider> ();
 		m_anim = m_go.GetComponent<Animator> ();
 	}
 }
