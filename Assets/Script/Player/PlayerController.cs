@@ -80,9 +80,9 @@ public class PlayerController : GenericEntityController {
 		moveFX.Stop ();
 	}
 
-	public Dictionary<PlusSensor,Collider> GetPlusPairs ()
+	public Dictionary<Collider,PlusSensor> GetPlusPairs ()
 	{
-		Dictionary<PlusSensor, Collider> pair = new Dictionary<PlusSensor, Collider> ();
+		Dictionary<Collider,PlusSensor> pair = new Dictionary<Collider,PlusSensor> ();
 
 		plusSensors.ForEach (plusSensor=>
 			{
@@ -90,14 +90,14 @@ public class PlayerController : GenericEntityController {
 
 				Array.ForEach(colls, (coll)=>
 					{
-						pair.Add(plusSensor,coll);
+						pair.Add(coll, plusSensor);
 					});
 			});
 
 		return pair;
 	}
 
-	public void GetPlus(PlusStyle plusStyle)
+	public void GetPlus(PlusStyle plusStyle, Vector3 attachProxyPos)
 	{
 		plusStyles.Add (plusStyle);
 
@@ -110,6 +110,11 @@ public class PlayerController : GenericEntityController {
 				break;
 			}
 		}
+
+		PlusCacheCount ();
+
+		GameObject plusFxPrefab = playerSetting.GetFX (plusStyle);
+		plusFxPrefab.transform.position = attachProxyPos;
 	}
 
 	List<PlusStyle> plusStyles = new List<PlusStyle> ();

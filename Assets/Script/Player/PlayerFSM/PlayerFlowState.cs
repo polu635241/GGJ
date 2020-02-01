@@ -138,32 +138,44 @@ public abstract class PlayerFlowState
 
 	protected void CachePlus ()
 	{
-		Dictionary<PlusSensor,Collider> plusPairs = PlayerController.GetPlusPairs ();
+		Dictionary<Collider,PlusSensor> plusPairs = PlayerController.GetPlusPairs ();
 
-		Dictionary<PlusSensor,Collider> needProcessPairs = new Dictionary<PlusSensor, Collider> ();
+		Dictionary<Collider,PlusSensor> needProcessPairs = new Dictionary<Collider,PlusSensor> ();
 
-		plusPairs.ForEach ((plusSensor, BoxCollider)=>
+		List<PlusSensor> needRemovePlusSensors = new List<PlusSensor> ();
+
+		plusPairs.ForEach ((BoxCollider, plusSensor)=>
 			{
 				//同一個物件被多個感應器碰到擇一即可
-				if(!needProcessPairs.ContainsValue(BoxCollider))
+				if(!needProcessPairs.ContainsKey(BoxCollider))
 				{
-					needProcessPairs.Add(plusSensor,BoxCollider);
+					needProcessPairs.Add(BoxCollider,plusSensor);
 
 					BoxCollider.gameObject.layer = LayerMask.NameToLayer(Layers.AttachPlus);
 
-					bool removePlusSensorSuccess= PlayerController.PlusSensors.Remove (plusSensor);
-
-					if(!removePlusSensorSuccess)
+					if(!needRemovePlusSensors.Contains(plusSensor))
 					{
-						Debug.LogError ("remove fail");
+						needRemovePlusSensors.Add(plusSensor);
 					}
+
 
 					Timing.RunCoroutine(CatchPlus (needProcessPairs));
 				}
 			});
+
+		needRemovePlusSensors.ForEach (plusSensor=>
+			{
+				bool removePlusSensorSuccess= PlayerController.PlusSensors.Remove (plusSensor);
+				
+				if(!removePlusSensorSuccess)
+				{
+					Debug.LogError ("remove fail");
+				}
+			});
+
 	}
 
-	IEnumerator<float> CatchPlus(Dictionary<PlusSensor,Collider> needProcessPairs)
+	IEnumerator<float> CatchPlus(Dictionary<Collider,PlusSensor> needProcessPairs)
 	{
 		float beginTime = Time.time;
 		float needTime = PlayerSetting.CachePlusTime;
@@ -183,30 +195,41 @@ public abstract class PlayerFlowState
 		EatFinish (needProcessPairs);
 	}
 
-	void EatFinish(Dictionary<PlusSensor,Collider> needProcessPairs)
+	void EatFinish(Dictionary<Collider,PlusSensor> needProcessPairs)
 	{
-		needProcessPairs.ForEach ((originPlusSensor,eatTargetCollider)=>
+		needProcessPairs.ForEach ((eatTargetCollider,originPlusSensor)=>
 			{
-				PlusSensor eatTargetPlusSensor = eatTargetCollider.GetComponentInChildren<PlusSensor> ();
+				PlusSensor[] eatTargetPlusSensors = eatTargetCollider.GetComponentsInChildren<PlusSensor> ();
 				
-				PlayerController.PlusSensors.Add (eatTargetPlusSensor);
+				PlayerController.PlusSensors.AddRange (eatTargetPlusSensors);
 
 				Transform eatTargetTransform = eatTargetCollider.transform;
 				eatTargetTransform.SetParent (PlayerController.m_Transform);
 
-				eatTargetTransform.position = originPlusSensor.Proxy.position;
+				Vector3 proxyPos = originPlusSensor.Proxy.position;
 
-				PlayerController.PlusCacheCount ();
+				eatTargetTransform.position = proxyPos;
+
+				Plus plusCache = eatTargetTransform.GetComponent<Plus> ();
+
+				if(plusCache==null)
+				{
+					string eatGOName = eatTargetTransform.name;
+					Debug.LogError(eatGOName + "can't get <Plus>");
+				}
+				else
+				{
+					PlayerController.GetPlus(plusCache.PlusStyle, proxyPos);
+				}
 
 				BoxCollider eatTargetBoxCollider = (BoxCollider)eatTargetCollider;
-
 				PlayerController.TransferColl(eatTargetBoxCollider);
 			});
 	}
 
-	void LerpPlusEntityPos(Dictionary<PlusSensor,Collider> needProcessPairs, float _value)
+	void LerpPlusEntityPos(Dictionary<Collider,PlusSensor> needProcessPairs, float _value)
 	{
-		needProcessPairs.ForEach ((originPlusSensor,eatTargetCollider)=>
+		needProcessPairs.ForEach ((eatTargetCollider,originPlusSensor)=>
 			{
 				Transform eatTargetTransform = eatTargetCollider.transform;
 
