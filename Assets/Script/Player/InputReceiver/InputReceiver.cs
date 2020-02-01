@@ -12,5 +12,5 @@ public abstract class InputReceiver
 
 	public abstract bool Down ();
 
-	public abstract bool Jump ();
+	public abstract bool CatchPlus ();
 }

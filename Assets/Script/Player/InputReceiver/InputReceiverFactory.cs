@@ -13,6 +13,16 @@ public static class InputReceiverFactory
 			{
 				return new LeftPlayerInputReceiver ();
 			}
+
+			case  PlayerStyle.RightPlayer:
+			{
+				return new RightPlayerInputReceiver ();
+			}
+
+			case  PlayerStyle.MidPlayer:
+			{
+				return new MidPlayerInputReceiver ();
+			}
 		}
 
 		throw new Exception ("找不到對應的硬體輸入器");

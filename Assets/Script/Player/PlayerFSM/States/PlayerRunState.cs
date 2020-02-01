@@ -16,7 +16,7 @@ public class PlayerRunState : PlayerFlowState {
 
 	public override PlayerFlowState Stay (float deltaTime)
 	{
-		if (InputReceiver.Jump ()) 
+		if (InputReceiver.CatchPlus ()) 
 		{
 			CachePlus ();
 		}
