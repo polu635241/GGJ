@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using MEC;
 
-public class GameFlowController : MonoBehaviour 
+public class GameController : MonoBehaviour 
 {
-	public static GameFlowController Instance;
+	public static GameController Instance;
 
 	public GameFlow GameFlow
 	{

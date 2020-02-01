@@ -32,11 +32,11 @@ public abstract class PlayerFlowState
 		}
 	}
 
-	protected GameFlowController GameFlowController
+	protected GameController GameController
 	{
 		get
 		{
-			return GameFlowController.Instance;
+			return GameController.Instance;
 		}
 	}
 
@@ -172,7 +172,7 @@ public abstract class PlayerFlowState
 		float remainingTime = needTime;
 		float finishTime = beginTime + needTime;
 
-		while (remainingTime > 0 && GameFlowController.GameFlow == GameFlow.CatchPlusFight)
+		while (remainingTime > 0 && GameController.GameFlow == GameFlow.CatchPlusFight)
 		{
 			float progress = (1 - remainingTime / needTime);
 
