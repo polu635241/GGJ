@@ -149,19 +149,18 @@ public abstract class PlayerFlowState
 				//同一個物件被多個感應器碰到擇一即可
 				if(!needProcessPairs.ContainsKey(BoxCollider))
 				{
-					needProcessPairs.Add(BoxCollider,plusSensor);
-
 					BoxCollider.gameObject.layer = LayerMask.NameToLayer(Layers.AttachPlus);
+					
+					needProcessPairs.Add(BoxCollider,plusSensor);
 
 					if(!needRemovePlusSensors.Contains(plusSensor))
 					{
 						needRemovePlusSensors.Add(plusSensor);
 					}
-
-
-					Timing.RunCoroutine(CatchPlus (needProcessPairs));
 				}
 			});
+		
+		Timing.RunCoroutine(CatchPlus (needProcessPairs));
 
 		needRemovePlusSensors.ForEach (plusSensor=>
 			{
@@ -187,7 +186,6 @@ public abstract class PlayerFlowState
 			float progress = (1 - remainingTime / needTime);
 
 			LerpPlusEntityPos (needProcessPairs, progress);
-
 			yield return Timing.WaitForOneFrame;
 			remainingTime = finishTime - Time.time;
 		}
@@ -199,32 +197,38 @@ public abstract class PlayerFlowState
 	{
 		needProcessPairs.ForEach ((eatTargetCollider,originPlusSensor)=>
 			{
-				PlusSensor[] eatTargetPlusSensors = eatTargetCollider.GetComponentsInChildren<PlusSensor> ();
-				
-				PlayerController.PlusSensors.AddRange (eatTargetPlusSensors);
+				PlusSensor triggerPlusSensor = eatTargetCollider.GetComponent<PlusSensor>();
 
-				Transform eatTargetTransform = eatTargetCollider.transform;
-				eatTargetTransform.SetParent (PlayerController.m_Transform);
+				Plus plus = triggerPlusSensor.Plus;
+
+				PlusSensor[] bindPlusSensors =  plus.GetComponentsInChildren<PlusSensor>();
+
+				List<PlusSensor> targetOtherPlusSensors = new List<PlusSensor>(bindPlusSensors);
+
+				bool success = targetOtherPlusSensors.Remove(triggerPlusSensor);
+
+				if(!success)
+				{
+					Debug.LogError ("not success");
+				}
+
+				targetOtherPlusSensors.ForEach(otherSensor=>
+					{
+						PlayerController.PlusSensors.Add(otherSensor,plus.PlusStyle);
+					});
+
+
+				Transform plusTransform = plus.transform;
+				plusTransform.SetParent (PlayerController.PlusRoot);
 
 				Vector3 proxyPos = originPlusSensor.Proxy.position;
 
-				eatTargetTransform.position = proxyPos;
-
-				Plus plusCache = eatTargetTransform.GetComponent<Plus> ();
-
-				if(plusCache==null)
-				{
-					string eatGOName = eatTargetTransform.name;
-					Debug.LogError(eatGOName + "can't get <Plus>");
-				}
-				else
-				{
-					PlayerController.GetPlus(plusCache.PlusStyle, proxyPos);
-				}
+				plusTransform.position = proxyPos;
 
 				BoxCollider eatTargetBoxCollider = (BoxCollider)eatTargetCollider;
 				PlayerController.TransferColl(eatTargetBoxCollider);
 			});
+
 	}
 
 	void LerpPlusEntityPos(Dictionary<Collider,PlusSensor> needProcessPairs, float _value)
@@ -233,10 +237,9 @@ public abstract class PlayerFlowState
 			{
 				Transform eatTargetTransform = eatTargetCollider.transform;
 
-				eatTargetTransform.position = originPlusSensor.Proxy.position;
+				Plus plus = eatTargetTransform.GetComponent<PlusSensor>().Plus;
 
-				Vector3.Lerp(eatTargetTransform.position , originPlusSensor.Proxy.position,_value);
-
+				plus.transform.position = Vector3.Lerp(plus.transform.position , originPlusSensor.Proxy.position,_value);
 			});
 	}
 }

@@ -68,4 +68,29 @@ public class PlayerSetting : ScriptableObject
 
 	[SerializeField]
 	GameObject atkFxPrefab;
+
+	public GameObject GetFX(PlusStyle plusStyle)
+	{
+		switch(plusStyle)
+		{
+			case PlusStyle.atk:
+			{
+				return atkFxPrefab;
+			}
+
+			case PlusStyle.hp:
+			{
+				return hpFxPrefab;
+			}
+
+			case PlusStyle.speed:
+			{
+				return speedFxPrefab;
+			}
+		}
+
+		string plusStyleStr = plusStyle.ToString ();
+
+		throw new UnityException ("找不到對應的預置物 plusStyle -> " + plusStyleStr);
+	}
 }
