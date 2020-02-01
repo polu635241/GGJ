@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightState : GameFlowState 
+public class ResetState : GameFlowState 
 {
-	public FightState (GameFlowController gameFlowController) : base (gameFlowController)
+	public ResetState (GameFlowController gameFlowController) : base (gameFlowController)
 	{
 
 	}
@@ -12,15 +12,12 @@ public class FightState : GameFlowState
 	public override void Enter (GameFlowState prevState)
 	{
 		base.Enter (prevState);
+
+		GameController.Reset ();
 	}
 
 	public override GameFlowState Stay (float deltaTime)
 	{	
-		if (Input.GetKeyDown (KeyCode.Escape)) 
-		{
-			return GetState<ResetState> ();
-		}
-		
 		return null;
 	}
 
@@ -33,7 +30,7 @@ public class FightState : GameFlowState
 	{
 		get 
 		{
-			return GameFlow.Fight;
+			return GameFlow.Reset;
 		}
 	}
 }

@@ -34,5 +34,7 @@ public class GameFlowRepository
 		gameFlowStateDictTable.Add (typeof(StandbyState), new StandbyState (gameFlowController));
 		gameFlowStateDictTable.Add (typeof(CatchPlusState), new CatchPlusState (gameFlowController));
 		gameFlowStateDictTable.Add (typeof(FightState), new FightState (gameFlowController));
+		gameFlowStateDictTable.Add (typeof(LoadState), new LoadState (gameFlowController));
+		gameFlowStateDictTable.Add (typeof(ResetState), new ResetState (gameFlowController));
 	}
 }

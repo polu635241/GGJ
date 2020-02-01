@@ -6,5 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scene/StandbyScene.unity
+    guid: c595e44eb46668a448d84eee719eda86
+  - enabled: 1
     path: Assets/Scene/TestScene.unity
     guid: 44bc8386293f25b4f9c57bced4f77279
+  - enabled: 1
+    path: Assets/Scene/TempScene.unity
+    guid: 09756228dcef6514481543d09003af43
+  m_configObjects: {}

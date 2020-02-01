@@ -6,7 +6,12 @@ using UnityEngine;
 [Serializable]
 public class GameFlowController
 {
-	public GameFlowController (GameFlowController playerController)
+	public GameFlowController ()
+	{
+		
+	}
+
+	public void Init()
 	{
 		gameFlowRepository = new GameFlowRepository (this);
 		ForceChangeState<StandbyState> ();

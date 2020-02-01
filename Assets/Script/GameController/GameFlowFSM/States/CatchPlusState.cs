@@ -16,11 +16,24 @@ public class CatchPlusState : GameFlowState
 
 	public override GameFlowState Stay (float deltaTime)
 	{
+		if (Input.GetKeyDown (KeyCode.Escape)) 
+		{
+			return GetState<ResetState> ();
+		}
+		
 		return null;
 	}
 
 	public override void Exit ()
 	{
 		base.Exit ();
+	}
+
+	protected override GameFlow BindGameFlow 
+	{
+		get 
+		{
+			return GameFlow.CatchPlus;
+		}
 	}
 }

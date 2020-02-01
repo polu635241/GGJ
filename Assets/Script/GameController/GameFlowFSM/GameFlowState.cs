@@ -23,6 +23,7 @@ public abstract class GameFlowState
 	
 	public virtual void Enter(GameFlowState prevState)
 	{
+		GameController.GameFlow = BindGameFlow;
 	}
 	
 	public virtual GameFlowState Stay (float deltaTime)
@@ -38,5 +39,10 @@ public abstract class GameFlowState
 	protected GameFlowState GetState<T> () where T:GameFlowState
 	{
 		return flowController.GetState<T> ();
+	}
+
+	protected abstract GameFlow BindGameFlow
+	{
+		get;
 	}
 }

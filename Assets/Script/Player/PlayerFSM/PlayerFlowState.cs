@@ -170,7 +170,7 @@ public abstract class PlayerFlowState
 		float remainingTime = needTime;
 		float finishTime = beginTime + needTime;
 
-		while (remainingTime > 0 && GameController.GameFlow == GameFlow.CatchPlusFight)
+		while (remainingTime > 0 && GameController.GameFlow == GameFlow.CatchPlus)
 		{
 			float progress = (1 - remainingTime / needTime);
 
