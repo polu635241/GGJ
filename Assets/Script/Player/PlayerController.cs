@@ -14,6 +14,17 @@ public class PlayerController : GenericEntityController {
 	[SerializeField]
 	List<PlusSensor> plusSensors = new List<PlusSensor> ();
 
+	[SerializeField][ReadOnly]
+	ParticleSystem moveFX;
+
+	public ParticleSystem MoveFX
+	{
+		get
+		{
+			return moveFX;
+		}
+	}
+
 	public List<PlusSensor> PlusSensors
 	{
 		get
@@ -60,6 +71,10 @@ public class PlayerController : GenericEntityController {
 		cacheCount = 0;
 
 		currentMoveSpeed = playerSetting.MoveSpeed;
+
+		moveFX = this.GetComponentInChildren<ParticleSystem> ();
+
+		moveFX.Stop ();
 	}
 
 	public Dictionary<PlusSensor,Collider> GetPlusPairs ()
