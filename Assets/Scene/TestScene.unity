@@ -784,6 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plus: {fileID: 0}
+  hasOwner: 0
   sensorStyle: 2
   proxy: {fileID: 636936637}
 --- !u!4 &660231643
@@ -1494,6 +1495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plus: {fileID: 0}
+  hasOwner: 0
   sensorStyle: 2
   proxy: {fileID: 0}
 --- !u!4 &1192087917
@@ -2437,6 +2439,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a1fe433e8ce5754faef3cc3f70472f9, type: 3}
+--- !u!1 &1909726862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1909726863}
+  m_Layer: 0
+  m_Name: '[PlusRoot]'
+  m_TagString: PlusRoot
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1909726863
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909726862}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.8657227, y: -0.359375, z: -1.0136719}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 26
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2130067482 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4174606277530180, guid: 8a1fe433e8ce5754faef3cc3f70472f9,
