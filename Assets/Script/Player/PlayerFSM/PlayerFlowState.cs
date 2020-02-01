@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MEC;
 
 public abstract class PlayerFlowState
 {
@@ -28,6 +29,14 @@ public abstract class PlayerFlowState
 		get
 		{
 			return PlayerController.PlayerSetting;
+		}
+	}
+
+	protected GameFlowController GameFlowController
+	{
+		get
+		{
+			return GameFlowController.Instance;
 		}
 	}
 
@@ -150,8 +159,28 @@ public abstract class PlayerFlowState
 					{
 						Debug.LogError ("remove fail");
 					}
+
+					Timing.RunCoroutine(CatchPlus (needProcessPairs));
 				}
 			});
+	}
+
+	IEnumerator<float> CatchPlus(Dictionary<PlusSensor,Collider> needProcessPairs)
+	{
+		float beginTime = Time.time;
+		float needTime = PlayerSetting.CachePlusTime;
+		float remainingTime = needTime;
+		float finishTime = beginTime + needTime;
+
+		while (remainingTime > 0 && GameFlowController.GameFlow == GameFlow.CatchPlusFight)
+		{
+			float progress = (1 - remainingTime / needTime);
+
+			LerpPlusEntityPos (needProcessPairs, progress);
+
+			yield return Timing.WaitForOneFrame;
+			remainingTime = finishTime - Time.time;
+		}
 
 		EatFinish (needProcessPairs);
 	}
@@ -174,6 +203,19 @@ public abstract class PlayerFlowState
 				BoxCollider eatTargetBoxCollider = (BoxCollider)eatTargetCollider;
 
 				PlayerController.TransferColl(eatTargetBoxCollider);
+			});
+	}
+
+	void LerpPlusEntityPos(Dictionary<PlusSensor,Collider> needProcessPairs, float _value)
+	{
+		needProcessPairs.ForEach ((originPlusSensor,eatTargetCollider)=>
+			{
+				Transform eatTargetTransform = eatTargetCollider.transform;
+
+				eatTargetTransform.position = originPlusSensor.Proxy.position;
+
+				Vector3.Lerp(eatTargetTransform.position , originPlusSensor.Proxy.position,_value);
+
 			});
 	}
 }

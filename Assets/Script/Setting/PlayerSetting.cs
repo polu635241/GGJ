@@ -17,13 +17,13 @@ public class PlayerSetting : ScriptableObject
 	}
 
 	[SerializeField]
-	float attachTime;
+	float cachePlusTime;
 
-	public float AttachTime
+	public float CachePlusTime
 	{
 		get
 		{
-			return attachTime;
+			return cachePlusTime;
 		}
 	}
 
