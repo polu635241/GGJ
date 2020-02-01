@@ -13,7 +13,7 @@ public class ResetState : GameFlowState
 	{
 		base.Enter (prevState);
 
-		GameController.Reset ();
+		GameController._Reset ();
 	}
 
 	public override GameFlowState Stay (float deltaTime)
