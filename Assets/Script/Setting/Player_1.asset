@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   cachePlusTime: 0.5
+  cachePlusFlowTime: 30
+  fightFlowTime: 30
   reduceSpeedScale: 0.08
   plusSpeedScale: 0.18
   keepSpeedScale: 0.5
@@ -23,3 +25,6 @@ MonoBehaviour:
     type: 3}
   atkFxPrefab: {fileID: 2074185463804129306, guid: 4df62282b467e324f826eefcc5e74f7f,
     type: 3}
+  fightFxTime: 0
+  plusRootFadeOutTime: 3
+  plusRootDeltaY: -10

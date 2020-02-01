@@ -16,7 +16,7 @@ public class PlayerSetting : ScriptableObject
 		}
 	}
 
-	[SerializeField]
+	[SerializeField][Header("物件綁定的時間")]
 	float cachePlusTime;
 
 	public float CachePlusTime
@@ -24,6 +24,28 @@ public class PlayerSetting : ScriptableObject
 		get
 		{
 			return cachePlusTime;
+		}
+	}
+
+	[SerializeField][Header("抓東西流程時間")]
+	float cachePlusFlowTime;
+
+	public float CachePlusFlowTime
+	{
+		get
+		{
+			return cachePlusFlowTime;
+		}
+	}
+
+	[SerializeField][Header("戰鬥流程時間")]
+	float fightFlowTime;
+
+	public float FightFlowTime
+	{
+		get
+		{
+			return fightFlowTime;
 		}
 	}
 
@@ -93,4 +115,37 @@ public class PlayerSetting : ScriptableObject
 
 		throw new UnityException ("找不到對應的預置物 plusStyle -> " + plusStyleStr);
 	}
+
+	public float FightFxTime
+	{
+		get
+		{
+			return fightFxTime;
+		}
+	}
+
+	[SerializeField]
+	float fightFxTime;
+
+	public float PlusRootFadeOutTime
+	{
+		get
+		{
+			return plusRootFadeOutTime;
+		}
+	}
+
+	[SerializeField]
+	float plusRootFadeOutTime;
+
+	public float PlusRootDeltaY
+	{
+		get
+		{
+			return plusRootDeltaY;
+		}
+	}
+
+	[SerializeField]
+	float plusRootDeltaY;
 }
