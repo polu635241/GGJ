@@ -43,14 +43,14 @@ public class PlayerRunState : PlayerFlowState {
 				PlayerController.SetTargetRot (degree);
 			}
 
-			if (InputReceiver.Atk()) 
+			if (InputReceiver.Atk () && GameController.GameFlow == GameFlow.Fight)
 			{
 				return GetState<PlayerAtkState> ();
 			}
 		}
 		else
 		{
-			if (InputReceiver.Atk()) 
+			if (InputReceiver.Atk () && GameController.GameFlow == GameFlow.Fight)
 			{
 				return GetState<PlayerAtkState> ();
 			}

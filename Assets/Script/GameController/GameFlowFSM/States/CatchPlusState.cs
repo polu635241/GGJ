@@ -28,7 +28,7 @@ public class CatchPlusState : GameFlowState
 		eslapedTime = 0f;
 
 		flowController.camera = GameObject.FindObjectOfType<Camera> ();
-		flowController.cameraAnimator = flowController.camera.GetComponent<Animator> ();
+		flowController.cameraAnimator = flowController.camera.transform.parent.GetComponent<Animator> ();
 
 		if (flowController.cameraAnimator != null) 
 		{
