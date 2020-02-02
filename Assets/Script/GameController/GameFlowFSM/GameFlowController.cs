@@ -34,6 +34,8 @@ public class GameFlowController
 
 	public List<PlayerController> playerControllers = new List<PlayerController> ();
 
+	public List<Transform> hpEntitys = new List<Transform> ();
+
 	public void Stay(float deltaTime)
 	{
 		GameFlowState nextState = currentState.Stay (deltaTime);

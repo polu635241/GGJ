@@ -8,4 +8,5 @@ public class Tags
 	public const string FightFx = "FightFx";
 	public const string TimeClockText = "TimeClockText";
 	public const string tagUI = "tagUI";
+	public const string hp_UI = "hp_UI";
 }

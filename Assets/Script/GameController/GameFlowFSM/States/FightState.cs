@@ -35,15 +35,19 @@ public class FightState : GameFlowState
 
 		bool notAlive = true;
 
-		flowController.playerControllers.ForEach (playerController=>
-			{
-				playerController.SearchInjured();
+		for (int i = 0; i < flowController.playerControllers.Count; i++) 
+		{
+			PlayerController playerController = flowController.playerControllers [i];
 
-				if(playerController.Hp > 0)
-				{
-					notAlive = false;
-				}
-			});
+			playerController.SearchInjured();
+
+			if(playerController.Hp > 0)
+			{
+				notAlive = false;
+			}
+
+			flowController.hpEntitys [i].position = playerController.transform.position;
+		}
 
 		if (notAlive) 
 		{

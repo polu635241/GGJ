@@ -48,10 +48,13 @@ public class WaitFightState : GameFlowState
 			flowController.cameraAnimator.enabled = true;
 		}
 
-		flowController.playerControllers.ForEach (playerController=>
-			{
-				playerController.HpController.gameObject.SetActive (true);
-			});
+		for (int i = 0; i < flowController.playerControllers.Count; i++) 
+		{
+			PlayerController playerController = flowController.playerControllers [i];
+
+			flowController.hpEntitys [i].position = playerController.transform.position;
+			flowController.hpEntitys [i].gameObject.SetActive (true);
+		}
 	}
 
 	public override GameFlowState Stay (float deltaTime)
@@ -103,11 +106,6 @@ public class WaitFightState : GameFlowState
 	public override void Exit ()
 	{
 		base.Exit ();
-
-		if (flowController.fxGOAnim != null) 
-		{
-			flowController.fxGOAnim.Play (Animations.Temp);
-		}
 	}
 
 	protected override GameFlow BindGameFlow 

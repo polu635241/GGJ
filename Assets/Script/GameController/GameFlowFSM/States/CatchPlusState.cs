@@ -15,11 +15,17 @@ public class CatchPlusState : GameFlowState
 		base.Enter (prevState);
 
 		flowController.playerControllers = new List<PlayerController> (GameObject.FindObjectsOfType<PlayerController> ());
+		flowController.hpEntitys = new List<Transform> ();
+		GameObject[] hpControllerEntitys = GameObject.FindGameObjectsWithTag (Tags.hp_UI);
 
-		flowController.playerControllers.ForEach (playerController=>
-			{
-				playerController.HpController.gameObject.SetActive (false);
-			});
+		for (int i = 0; i < flowController.playerControllers.Count; i++) 
+		{
+			PlayerController playerController = flowController.playerControllers [i];
+			flowController.hpEntitys.Add (hpControllerEntitys [i].transform);
+			HpController hpController = hpControllerEntitys [i].GetComponentInChildren<HpController> ();
+			playerController.HpController = hpController;
+			hpControllerEntitys [i].gameObject.SetActive (false);
+		}
 
 		GameObject fxGO = GameObject.FindWithTag (Tags.FightFx);
 
