@@ -55,6 +55,12 @@ public class WaitFightState : GameFlowState
 			flowController.hpEntitys [i].position = playerController.transform.position;
 			flowController.hpEntitys [i].gameObject.SetActive (true);
 		}
+
+		if (flowController.fxGOAnim != null) 
+		{
+			flowController.fxGOAnim.Play (Animations.KO);
+			flowController.fxGOAnim.Play (Animations.Ready);
+		}
 	}
 
 	public override GameFlowState Stay (float deltaTime)
@@ -77,11 +83,6 @@ public class WaitFightState : GameFlowState
 				}
 				
 				hasClosePlusRoot = true;
-
-				if (flowController.fxGOAnim != null) 
-				{
-					flowController.fxGOAnim.Play (Animations.Ready);
-				}
 			}
 
 			if (eslapedTime > (plusRootFadeOutTime + fightFxTime)) 
@@ -112,6 +113,11 @@ public class WaitFightState : GameFlowState
 	public override void Exit ()
 	{
 		base.Exit ();
+
+		if (flowController.fxGOAnim != null) 
+		{
+			flowController.fxGOAnim.Play (Animations.Temp);
+		}
 	}
 
 	protected override GameFlow BindGameFlow 
