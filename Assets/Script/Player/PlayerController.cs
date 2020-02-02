@@ -72,6 +72,10 @@ public class PlayerController : GenericEntityController {
 	{
 		base.Awake ();
 
+		targetRot = m_Transform.rotation;
+
+		rotTime = GameController.Instance.PlayerSetting.RotTime;
+
 		plusRoot = new GameObject ("[PlusRoot]").transform;
 		plusRoot.SetParent (m_Transform);
 		plusRoot.localPosition = Vector3.zero;
@@ -143,10 +147,29 @@ public class PlayerController : GenericEntityController {
 
 	List<PlusStyle> plusStyles = new List<PlusStyle> ();
 
+	float rotTime;
+	float rotFinishTime;
+
 	void Update()
 	{
 		float deltaTime = Time.deltaTime;
 		playerFlowController.Stay (deltaTime);
+
+		float currentTime = Time.time;
+
+		if (m_Transform.rotation != targetRot) 
+		{
+			if (currentTime >= rotFinishTime) 
+			{
+				m_Transform.rotation = targetRot;
+			}
+			else
+			{
+				float rotProgress = (rotFinishTime - currentTime) / rotTime;
+
+				m_Transform.rotation = Quaternion.Lerp (m_Transform.rotation, targetRot, rotProgress);
+			}
+		}
 	}
 
 	public void MoveBreak ()
@@ -208,6 +231,18 @@ public class PlayerController : GenericEntityController {
 		newColl.size = size;
 
 		Destroy (coll);
+	}
+
+	[SerializeField][ReadOnly]
+	Quaternion targetRot;
+
+	public void SetTargetRot (float degree)
+	{
+		Quaternion newRot = Quaternion.Euler (0, degree, 0);
+
+		targetRot = newRot;
+
+		rotFinishTime = Time.time - rotTime;
 	}
 
 	[SerializeField][ReadOnly]
