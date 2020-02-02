@@ -53,7 +53,7 @@ public class PlusSensor : GenericEntityController
 	[SerializeField]
 	Transform proxy;
 	
-	public List<Collider> GetCollider (int plusMask, int plusSensorMask, PlayerController owner)
+	public List<Collider> GetCollider (int plusSensorMask, PlayerController owner)
 	{
 		Vector3 center = m_Transform.position;
 		Vector3 halfExtents = Tool.MultiV3 (m_Collider.size / 2, m_Transform.localScale);
@@ -61,6 +61,34 @@ public class PlusSensor : GenericEntityController
 		Collider[] plusSensorColls = Physics.OverlapBox (center, halfExtents, m_Transform.rotation, plusSensorMask);
 
 		return ProcessColls (plusSensorColls, owner);
+	}
+
+	public List<PlayerController> GetOtherController (int plusSensorMask, PlayerController selfOwner)
+	{
+		Vector3 center = m_Transform.position;
+		Vector3 halfExtents = Tool.MultiV3 (m_Collider.size / 2, m_Transform.localScale);
+
+		Collider[] plusSensorColls = Physics.OverlapBox (center, halfExtents, m_Transform.rotation, plusSensorMask);
+
+		return ProcessOtherController (plusSensorColls, selfOwner);
+	}
+
+	List<PlayerController> ProcessOtherController (Collider[] plusSensorColls, PlayerController selfOwner)
+	{
+		List<PlayerController> otherControllers = new List<PlayerController> ();
+		
+		Array.ForEach (plusSensorColls, coll => 
+			{
+				PlusSensor plusSensor = coll.gameObject.GetComponent<PlusSensor> ();
+
+				// layer擺錯 或者 掃到自己的了
+				if(plusSensor != null&&plusSensor.hasOwner && plusSensor.Owner!=selfOwner)
+				{
+					otherControllers.Add(plusSensor.Owner);
+				}
+			});
+
+		return otherControllers;
 	}
 
 	List<Collider> ProcessColls (Collider[] plusSensorColls, PlayerController owner)

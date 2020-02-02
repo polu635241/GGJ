@@ -29,6 +29,9 @@ public class GameFlowController
 
 	public Text clockText;
 
+	public Camera camera;
+	public Animator cameraAnimator;
+
 	public void Stay(float deltaTime)
 	{
 		GameFlowState nextState = currentState.Stay (deltaTime);

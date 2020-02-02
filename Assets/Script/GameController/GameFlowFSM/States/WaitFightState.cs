@@ -42,6 +42,11 @@ public class WaitFightState : GameFlowState
 			plusRootTransform = plusRoot.transform;
 			originPos = plusRootTransform.position;
 		}
+
+		if (flowController.cameraAnimator != null) 
+		{
+			flowController.cameraAnimator.enabled = true;
+		}
 	}
 
 	public override GameFlowState Stay (float deltaTime)

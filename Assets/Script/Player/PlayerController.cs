@@ -42,9 +42,6 @@ public class PlayerController : GenericEntityController {
 	}
 
 	[SerializeField]
-	LayerMask plusLayerMask;
-
-	[SerializeField]
 	LayerMask plusSensorLayerMask;
 
 	[SerializeField][ReadOnly]
@@ -153,6 +150,25 @@ public class PlayerController : GenericEntityController {
 		}
 	}
 
+	public void SearchInjured ()
+	{
+		List<PlayerController> otherInjuredControllers = new List<PlayerController> ();
+		
+		plusSensors.ForEach ((plusSensor, plusStyle)=>
+			{
+				//攻擊用感測器
+				if(plusStyle == PlusStyle.atk)
+				{
+					otherInjuredControllers = plusSensor.GetOtherController(plusSensorLayerMask.value,this);
+				}
+			});
+
+		otherInjuredControllers.ForEach (otherInjuredController=>
+			{
+				otherInjuredController.Injured(atk);
+			});
+	}
+
 	public void Injured(int atk)
 	{
 		if (Time.time > enableInjuredTime)
@@ -174,7 +190,7 @@ public class PlayerController : GenericEntityController {
 
 		plusSensors.ForEach ((plusSensor,plusStyle)=>
 			{
-				List<Collider> colls = plusSensor.GetCollider(plusLayerMask.value, plusSensorLayerMask.value,this);
+				List<Collider> colls = plusSensor.GetCollider(plusSensorLayerMask.value,this);
 
 				colls.ForEach((coll)=>
 					{

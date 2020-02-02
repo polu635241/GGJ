@@ -28,7 +28,7 @@ public class PlayerIdleState : PlayerFlowState {
 			return GetState<PlayerRunState> ();
 		}
 
-		if (InputReceiver.Atk()) 
+		if (InputReceiver.Atk () && GameController.GameFlow == GameFlow.Fight)
 		{
 			return GetState<PlayerAtkState> ();
 		}
