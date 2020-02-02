@@ -28,6 +28,11 @@ public class PlayerIdleState : PlayerFlowState {
 			return GetState<PlayerRunState> ();
 		}
 
+		if (InputReceiver.Atk()) 
+		{
+			return GetState<PlayerAtkState> ();
+		}
+
 		return null;
 	}
 

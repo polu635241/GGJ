@@ -159,4 +159,26 @@ public class PlayerSetting : ScriptableObject
 
 	[SerializeField]
 	float rotTime;
+
+	[SerializeField]
+	float atkTime;
+
+	public float AtkTime
+	{
+		get
+		{
+			return atkTime;
+		}
+	}
+
+	[SerializeField]
+	float atkVelocity;
+
+	public float AtkVelocity
+	{
+		get
+		{
+			return atkVelocity;
+		}
+	}
 }

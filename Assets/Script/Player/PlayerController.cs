@@ -238,7 +238,7 @@ public class PlayerController : GenericEntityController {
 
 	public void SetTargetRot (float degree)
 	{
-		Quaternion newRot = Quaternion.Euler (0, degree + 90, 0);
+		Quaternion newRot = Quaternion.Euler (0, degree, 0);
 
 		targetRot = newRot;
 

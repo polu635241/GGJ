@@ -42,9 +42,19 @@ public class PlayerRunState : PlayerFlowState {
 			{
 				PlayerController.SetTargetRot (degree);
 			}
+
+			if (InputReceiver.Atk()) 
+			{
+				return GetState<PlayerAtkState> ();
+			}
 		}
 		else
 		{
+			if (InputReceiver.Atk()) 
+			{
+				return GetState<PlayerAtkState> ();
+			}
+			
 			return GetState<PlayerIdleState> ();
 		}
 

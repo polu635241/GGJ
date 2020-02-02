@@ -29,3 +29,5 @@ MonoBehaviour:
   plusRootFadeOutTime: 3
   plusRootDeltaY: -10
   rotTime: 0.5
+  atkTime: 0.3
+  atkVelocity: 15
