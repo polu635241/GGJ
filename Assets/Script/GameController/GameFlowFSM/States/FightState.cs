@@ -6,7 +6,7 @@ public class FightState : GameFlowState
 {
 	public FightState (GameFlowController gameFlowController) : base (gameFlowController)
 	{
-		fightFlowTime = GameController.PlayerSetting.FightFlowTime;
+
 	}
 
 	public override void Enter (GameFlowState prevState)
@@ -20,24 +20,9 @@ public class FightState : GameFlowState
 		{
 			return GetState<ResetState> ();
 		}
-
-		eslapedTime += deltaTime;
-
-		if (eslapedTime > fightFlowTime) 
-		{
-			SetTime (0f);
-			return GetState<ResetState> ();
-		}
-		else
-		{
-			SetTime (fightFlowTime - eslapedTime);
-		}
 		
 		return null;
 	}
-
-	float fightFlowTime;
-	float eslapedTime;
 
 	public override void Exit ()
 	{

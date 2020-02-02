@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9229f002aba02a748af09788793267d0
+guid: 9ddda8dd8ec4b2441ac59313636f0993
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -9,12 +9,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: railing
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: railing_palette
-    second: {fileID: 2100000, guid: b24c1e5faeb83fa47ae836bc91687347, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0

@@ -5,7 +5,8 @@ using UnityEngine;
 public enum PlusStyle
 {
 	speed,
+
 	hp,
-	atk,
-	none
+
+	atk
 }

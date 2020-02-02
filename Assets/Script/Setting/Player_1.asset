@@ -14,25 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   cachePlusTime: 0.5
-  cachePlusFlowTime: 30
-  fightFlowTime: 30
   reduceSpeedScale: 0.08
   plusSpeedScale: 0.18
   keepSpeedScale: 0.5
-  speedFxPrefab: {fileID: 3764710678978458549, guid: fb70fadb8ef751045b74639a4b184b17,
+  speedFxPrefab: {fileID: 2438400585618800873, guid: a404d72da1b850f4cb664b3ec647e8d5,
     type: 3}
-  hpFxPrefab: {fileID: 271296185887558188, guid: e60f8bc61478c164497de9060f49e694,
+  hpFxPrefab: {fileID: 5462196633053110000, guid: 918715025a293ee4fa5cb4c30ea2ce06,
     type: 3}
-  atkFxPrefab: {fileID: 6659227073521994862, guid: c96a515edb8900245a3f8641be1ed430,
+  atkFxPrefab: {fileID: 2074185463804129306, guid: 4df62282b467e324f826eefcc5e74f7f,
     type: 3}
-  fightFxTime: 5
-  plusRootFadeOutTime: 3
-  plusRootDeltaY: -10
-  rotTime: 0.5
-  atkTime: 0.3
-  atkVelocity: 15
-  injuredProtectedTime: 1
-  baseAtk: 10
-  plusAtk: 20
-  hp: 100
-  plusHp: 30

@@ -28,9 +28,4 @@ public class LeftPlayerInputReceiver : InputReceiver
 	{
 		return Input.GetKeyDown (KeyCode.Q);
 	}
-
-	public override bool Atk ()
-	{
-		return Input.GetKeyDown (KeyCode.E);
-	}
 }

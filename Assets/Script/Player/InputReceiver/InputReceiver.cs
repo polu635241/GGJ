@@ -13,6 +13,4 @@ public abstract class InputReceiver
 	public abstract bool Down ();
 
 	public abstract bool CatchPlus ();
-
-	public abstract bool Atk ();
 }

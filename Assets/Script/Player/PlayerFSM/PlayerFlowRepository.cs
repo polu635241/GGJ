@@ -35,6 +35,5 @@ public class PlayerFlowRepository
 		playerFlowStateDictTable.Add (typeof(PlayerRunState), new PlayerRunState (playerFlowController));
 		playerFlowStateDictTable.Add (typeof(PlayerJump_RiseState), new PlayerJump_RiseState (playerFlowController));
 		playerFlowStateDictTable.Add (typeof(PlayerJump_DownState), new PlayerJump_DownState (playerFlowController));
-		playerFlowStateDictTable.Add (typeof(PlayerAtkState), new PlayerAtkState (playerFlowController));
 	}
 }

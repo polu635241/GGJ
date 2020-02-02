@@ -5,22 +5,14 @@ using UnityEngine;
 
 public class PlayerController : GenericEntityController {
 
-	[SerializeField][ReadOnly]
-	Transform plusRoot;
-
-	public Transform PlusRoot
-	{
-		get
-		{
-			return plusRoot;
-		}
-	}
-
 	[SerializeField]
 	PlayerStyle playerStyle;
 
+	[SerializeField][ReadOnly]
+	PlayerSetting playerSetting;
+
 	[SerializeField]
-	Dictionary<PlusSensor,PlusStyle> plusSensors = new Dictionary<PlusSensor,PlusStyle>();
+	List<PlusSensor> plusSensors = new List<PlusSensor> ();
 
 	[SerializeField][ReadOnly]
 	ParticleSystem moveFX;
@@ -33,7 +25,7 @@ public class PlayerController : GenericEntityController {
 		}
 	}
 
-	public Dictionary<PlusSensor,PlusStyle> PlusSensors
+	public List<PlusSensor> PlusSensors
 	{
 		get
 		{
@@ -42,7 +34,15 @@ public class PlayerController : GenericEntityController {
 	}
 
 	[SerializeField]
-	LayerMask plusSensorLayerMask;
+	LayerMask plusLayerMask;
+
+	public PlayerSetting PlayerSetting
+	{
+		get
+		{
+			return playerSetting;
+		}
+	}
 
 	[SerializeField][ReadOnly]
 	PlayerFlowController playerFlowController;
@@ -57,225 +57,67 @@ public class PlayerController : GenericEntityController {
 		}
 	}
 
-	public PlayerSetting PlayerSetting
-	{
-		get
-		{
-			return GameController.Instance.PlayerSetting;
-		}
-	}
-
-	[SerializeField][ReadOnly]
-	HpController hpController;
-
 	protected override void Awake ()
 	{
 		base.Awake ();
-
-		targetRot = m_Transform.rotation;
-
-		rotTime = GameController.Instance.PlayerSetting.RotTime;
-
-		plusRoot = new GameObject ("[PlusRoot]").transform;
-		plusRoot.SetParent (m_Transform);
-		plusRoot.localPosition = Vector3.zero;
 
 		inputReceiver = InputReceiverFactory.Get (playerStyle);
 
 		playerFlowController = new PlayerFlowController ();
 		playerFlowController.Init (this);
 
-		List<PlusSensor> getPlusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
-
-		plusSensors = new Dictionary<PlusSensor, PlusStyle> ();
-
-		getPlusSensors.ForEach (plusSensor=>
-			{
-				plusSensor.Owner = this;
-				plusSensors.Add(plusSensor,PlusStyle.none);
-			});
+		plusSensors = new List<PlusSensor> (m_Go.GetComponentsInChildren<PlusSensor> ());
 
 		cacheCount = 0;
 		cacheSpeedCount = 0;
 
 		plusStyles = new List<PlusStyle> ();
 
-		currentMoveSpeed = PlayerSetting.MoveSpeed;
+		currentMoveSpeed = playerSetting.MoveSpeed;
 
 		moveFX = this.GetComponentInChildren<ParticleSystem> ();
 
 		moveFX.Stop ();
-
-		PlayerSetting playerSetting = GameController.Instance.PlayerSetting;
-
-		atk = playerSetting.BaseAtk;
-		plusAtk = playerSetting.PlusAtk;
-		injuredProtectedTime = playerSetting.InjuredProtectedTime;
-		hp = playerSetting.Hp;
-		plusHp = playerSetting.PlusHp;
-		enableInjuredTime = 0f;
-
-		hpController = this.GetComponentInChildren<HpController> ();
 	}
 
-	[SerializeField][ReadOnly]
-	int atk;
-
-	[SerializeField][ReadOnly]
-	int plusAtk;
-
-	[SerializeField][ReadOnly]
-	int plusHp;
-
-	[SerializeField][ReadOnly]
-	float injuredProtectedTime;
-
-	[SerializeField][ReadOnly]
-	int hp;
-
-	[SerializeField][ReadOnly]
-	int mostHp;
-
-	public void SyncMostHp ()
+	public Dictionary<PlusSensor,Collider> GetPlusPairs ()
 	{
-		mostHp = hp;
-	}
+		Dictionary<PlusSensor, Collider> pair = new Dictionary<PlusSensor, Collider> ();
 
-	public int Hp
-	{
-		get
-		{
-			return hp;
-		}
-	}
-
-	[SerializeField][ReadOnly]
-	float enableInjuredTime;
-
-	[SerializeField][Range(0,5)]
-	int playerIndex;
-
-	public int PlayerIndex
-	{
-		get
-		{
-			return playerIndex;
-		}
-	}
-
-	public void SearchInjured ()
-	{
-		List<PlayerController> otherInjuredControllers = new List<PlayerController> ();
-		
-		plusSensors.ForEach ((plusSensor, plusStyle)=>
+		plusSensors.ForEach (plusSensor=>
 			{
-				//攻擊用感測器
-				if(plusStyle == PlusStyle.atk)
-				{
-					otherInjuredControllers = plusSensor.GetOtherController(plusSensorLayerMask.value,this);
-				}
-			});
+				Collider[] colls = plusSensor.GetCollider(plusLayerMask.value);
 
-		otherInjuredControllers.ForEach (otherInjuredController=>
-			{
-				otherInjuredController.Injured(atk);
-			});
-	}
-
-	public void Injured(int atk)
-	{
-		if (Time.time > enableInjuredTime)
-		{
-			hp -= atk;
-			enableInjuredTime = Time.time + injuredProtectedTime;
-
-			if (hp <= 0) 
-			{
-				hp = 0;
-				this.enabled = false;
-			}
-
-			float hpProportion = hp / mostHp;
-
-			hpController.SetValue (hpProportion);
-		}
-	}
-
-	public Dictionary<Collider,PlusSensor> GetPlusPairs ()
-	{
-		Dictionary<Collider,PlusSensor> pair = new Dictionary<Collider,PlusSensor> ();
-
-		plusSensors.ForEach ((plusSensor,plusStyle)=>
-			{
-				List<Collider> colls = plusSensor.GetCollider(plusSensorLayerMask.value,this);
-
-				colls.ForEach((coll)=>
+				Array.ForEach(colls, (coll)=>
 					{
-						pair.Add(coll, plusSensor);
+						pair.Add(plusSensor,coll);
 					});
 			});
 
 		return pair;
 	}
 
-	public void GetPlus(PlusStyle plusStyle, Vector3 attachProxyPos)
+	public void GetPlus(PlusStyle plusStyle)
 	{
 		plusStyles.Add (plusStyle);
 
 		switch(plusStyle)
 		{
-		case PlusStyle.speed:
+			case PlusStyle.speed:
 			{
 				cacheSpeedCount++;
 				FlushSpeed ();
 				break;
 			}
-
-		case PlusStyle.atk:
-			{
-				atk += plusAtk;
-				break;
-			}
-
-		case PlusStyle.hp:
-			{
-				hp += plusHp;
-				break;
-			}
 		}
-
-		PlusCacheCount ();
-
-		GameObject plusFxPrefab = PlayerSetting.GetFX (plusStyle);
-		GameObject plusFxGo = MonoBehaviour.Instantiate (plusFxPrefab);
-		plusFxGo.transform.position = attachProxyPos;
 	}
 
 	List<PlusStyle> plusStyles = new List<PlusStyle> ();
-
-	float rotTime;
-	float rotFinishTime;
 
 	void Update()
 	{
 		float deltaTime = Time.deltaTime;
 		playerFlowController.Stay (deltaTime);
-
-		float currentTime = Time.time;
-
-		if (m_Transform.rotation != targetRot) 
-		{
-			if (currentTime >= rotFinishTime) 
-			{
-				m_Transform.rotation = targetRot;
-			}
-			else
-			{
-				float rotProgress = (rotFinishTime - currentTime) / rotTime;
-
-				m_Transform.rotation = Quaternion.Lerp (m_Transform.rotation, targetRot, rotProgress);
-			}
-		}
 	}
 
 	public void MoveBreak ()
@@ -305,9 +147,9 @@ public class PlayerController : GenericEntityController {
 
 	void FlushSpeed()
 	{
-		float reduceScale = cacheCount * PlayerSetting.ReduceSpeedScale;
+		float reduceScale = cacheCount * playerSetting.ReduceSpeedScale;
 
-		float plusScale = cacheSpeedCount * PlayerSetting.ReduceSpeedScale;
+		float plusScale = cacheSpeedCount * playerSetting.ReduceSpeedScale;
 
 		float keepSpeedScale = PlayerSetting.KeepSpeedScale;
 
@@ -318,7 +160,7 @@ public class PlayerController : GenericEntityController {
 			processSpeedScale = keepSpeedScale;
 		}
 
-		currentMoveSpeed = PlayerSetting.MoveSpeed * processSpeedScale;
+		currentMoveSpeed = playerSetting.MoveSpeed * processSpeedScale;
 	}
 
 	public void TransferColl (BoxCollider coll)
@@ -337,18 +179,6 @@ public class PlayerController : GenericEntityController {
 		newColl.size = size;
 
 		Destroy (coll);
-	}
-
-	[SerializeField][ReadOnly]
-	Quaternion targetRot;
-
-	public void SetTargetRot (float degree)
-	{
-		Quaternion newRot = Quaternion.Euler (0, degree, 0);
-
-		targetRot = newRot;
-
-		rotFinishTime = Time.time - rotTime;
 	}
 
 	[SerializeField][ReadOnly]
