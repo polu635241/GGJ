@@ -48,6 +48,9 @@ public class GameController : MonoBehaviour
 	const int GamePlayerSceneIndex = 1;
 	const int TempSceneIndex = 2;
 
+	[SerializeField]
+	public GameObject hitFXPrefab;
+
 	// Use this for initialization
 	public void Awake () 
 	{
