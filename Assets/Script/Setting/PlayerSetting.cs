@@ -181,4 +181,48 @@ public class PlayerSetting : ScriptableObject
 			return atkVelocity;
 		}
 	}
+
+	[SerializeField]
+	float injuredProtectedTime;
+
+	public float InjuredProtectedTime
+	{
+		get
+		{
+			return injuredProtectedTime;
+		}
+	}
+
+	public int BaseAtk
+	{
+		get
+		{
+			return baseAtk;
+		}
+	}
+
+	[SerializeField]
+	int baseAtk;
+
+	public int PlusAtk
+	{
+		get
+		{
+			return plusAtk;
+		}
+	}
+
+	[SerializeField]
+	int plusAtk;
+
+	public int Hp
+	{
+		get
+		{
+			return hp;
+		}
+	}
+
+	[SerializeField]
+	int hp;
 }

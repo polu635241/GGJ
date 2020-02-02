@@ -105,7 +105,26 @@ public class PlayerController : GenericEntityController {
 		moveFX = this.GetComponentInChildren<ParticleSystem> ();
 
 		moveFX.Stop ();
+
+		PlayerSetting playerSetting = GameController.Instance.PlayerSetting;
+
+		atk = playerSetting.BaseAtk;
+		plusAtk = playerSetting.PlusAtk;
+		injuredProtectedTime = playerSetting.InjuredProtectedTime;
+		hp = playerSetting.Hp;
 	}
+
+	[SerializeField][ReadOnly]
+	int atk;
+
+	[SerializeField][ReadOnly]
+	int plusAtk;
+
+	[SerializeField][ReadOnly]
+	float injuredProtectedTime;
+
+	[SerializeField][ReadOnly]
+	int hp;
 
 	public Dictionary<Collider,PlusSensor> GetPlusPairs ()
 	{
