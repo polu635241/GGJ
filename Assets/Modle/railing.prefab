@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2572993949978349646}
   - component: {fileID: 2572993949975449710}
   - component: {fileID: 2572993949976580782}
+  - component: {fileID: 1160974609483390974}
   m_Layer: 0
   m_Name: railing
   m_TagString: Untagged
@@ -77,3 +78,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &1160974609483390974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2572993949978840174}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.26400006, y: 0.8579999, z: 0.8249999}
+  m_Center: {x: 0, y: -0.000000014901161, z: 0}
