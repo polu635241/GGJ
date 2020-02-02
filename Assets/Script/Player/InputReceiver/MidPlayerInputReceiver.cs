@@ -28,4 +28,9 @@ public class MidPlayerInputReceiver : InputReceiver
 	{
 		return Input.GetKeyDown (KeyCode.RightShift);
 	}
+
+	public override bool Atk ()
+	{
+		return Input.GetKeyDown (KeyCode.Return);
+	}
 }

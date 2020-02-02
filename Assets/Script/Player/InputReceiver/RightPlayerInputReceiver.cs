@@ -28,4 +28,9 @@ public class RightPlayerInputReceiver : InputReceiver
 	{
 		return Input.GetKeyDown (KeyCode.Plus);
 	}
+
+	public override bool Atk ()
+	{
+		return Input.GetKeyDown (KeyCode.Keypad5);
+	}
 }
