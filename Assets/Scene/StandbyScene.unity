@@ -590,6 +590,8 @@ MonoBehaviour:
     playerControllers: []
     hpEntitys: []
   playerSetting: {fileID: 11400000, guid: d81fee3111de3f24bafc8c0905f84673, type: 2}
+  hitFXPrefab: {fileID: 6659227073521994862, guid: c96a515edb8900245a3f8641be1ed430,
+    type: 3}
 --- !u!1 &1897913087
 GameObject:
   m_ObjectHideFlags: 0
