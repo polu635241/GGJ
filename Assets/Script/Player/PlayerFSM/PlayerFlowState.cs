@@ -162,15 +162,15 @@ public abstract class PlayerFlowState
 		
 		Timing.RunCoroutine(CatchPlus (needProcessPairs));
 
-		needRemovePlusSensors.ForEach (plusSensor=>
-			{
-				bool removePlusSensorSuccess= PlayerController.PlusSensors.Remove (plusSensor);
-				
-				if(!removePlusSensorSuccess)
-				{
-					Debug.LogError ("remove fail");
-				}
-			});
+//		needRemovePlusSensors.ForEach (plusSensor=>
+//			{
+//				bool removePlusSensorSuccess= PlayerController.PlusSensors.Remove (plusSensor);
+//				
+//				if(!removePlusSensorSuccess)
+//				{
+//					Debug.LogError ("remove fail");
+//				}
+//			});
 
 	}
 
