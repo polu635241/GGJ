@@ -227,6 +227,7 @@ public abstract class PlayerFlowState
 
 				BoxCollider eatTargetBoxCollider = (BoxCollider)eatTargetCollider;
 				PlayerController.TransferColl(eatTargetBoxCollider);
+				PlayerController.GetPlus(plus.PlusStyle, proxyPos);
 			});
 
 	}

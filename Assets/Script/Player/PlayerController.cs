@@ -192,7 +192,7 @@ public class PlayerController : GenericEntityController {
 				this.enabled = false;
 			}
 
-			float hpProportion = hp / mostHp;
+			float hpProportion = (float)hp / mostHp;
 
 			HpController.SetValue (hpProportion);
 		}

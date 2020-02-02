@@ -59,6 +59,12 @@ public class WaitFightState : GameFlowState
 
 	public override GameFlowState Stay (float deltaTime)
 	{
+		for (int i = 0; i < flowController.playerControllers.Count; i++) 
+		{
+			PlayerController playerController = flowController.playerControllers [i];
+			flowController.hpEntitys [i].position = playerController.transform.position;
+		}
+		
 		eslapedTime += Time.deltaTime;
 
 		if (eslapedTime > plusRootFadeOutTime) 
