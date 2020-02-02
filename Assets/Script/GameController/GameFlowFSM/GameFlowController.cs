@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class GameFlowController
@@ -22,7 +23,19 @@ public class GameFlowController
 	
 	[SerializeField][ReadOnly]
 	string currentStateInfo;
-	
+
+	[SerializeField]
+	public Animator fxGOAnim;
+
+	public Text clockText;
+
+	public Camera camera;
+	public Animator cameraAnimator;
+
+	public List<PlayerController> playerControllers = new List<PlayerController> ();
+
+	public List<Transform> hpEntitys = new List<Transform> ();
+
 	public void Stay(float deltaTime)
 	{
 		GameFlowState nextState = currentState.Stay (deltaTime);

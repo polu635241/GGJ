@@ -31,6 +31,17 @@ public class GameController : MonoBehaviour
 	[SerializeField][ReadOnly]
 	GameFlowController gameFlowController;
 
+	[SerializeField]
+	PlayerSetting playerSetting;
+
+	public PlayerSetting PlayerSetting
+	{
+		get
+		{
+			return playerSetting;
+		}
+	}
+
 //	[SerializeField]
 //	Button resetBtn;
 
@@ -75,11 +86,6 @@ public class GameController : MonoBehaviour
 
 	public IEnumerator<float> IntoPlaySceneCor ()
 	{	
-		UIs.ForEach (UI=>
-			{
-				UI.SetActive(false);
-			});
-		
 		AsyncOperation loadAsyn = SceneManager.LoadSceneAsync (GamePlayerSceneIndex);
 
 		while (!loadAsyn.isDone) 
@@ -88,6 +94,11 @@ public class GameController : MonoBehaviour
 		}
 
 		yield return Timing.WaitForOneFrame;
+
+		UIs.ForEach (UI=>
+			{
+				UI.SetActive(false);
+			});
 	}
 
 }

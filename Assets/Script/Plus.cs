@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class Plus : MonoBehaviour
 {
+	void Awake()
+	{
+		PlusSensor[] plusSensors= this.GetComponentsInChildren<PlusSensor> ();
+
+		foreach (PlusSensor plusSensor in plusSensors) 
+		{
+			plusSensor.Plus = this;
+		}
+	}
+	
 	[SerializeField]
 	PlusStyle plusStyle;
 
