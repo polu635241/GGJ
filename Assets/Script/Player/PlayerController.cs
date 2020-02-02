@@ -176,9 +176,6 @@ public class PlayerController : GenericEntityController {
 		otherInjuredControllers.ForEach (otherInjuredController=>
 			{
 				otherInjuredController.Injured(atk);
-				GameObject hitFXPrefab = GameController.Instance.hitFXPrefab;
-				GameObject hitEntity = MonoBehaviour.Instantiate(hitFXPrefab);
-				hitEntity.transform.position = otherInjuredController.transform.position;
 			});
 	}
 
@@ -198,6 +195,10 @@ public class PlayerController : GenericEntityController {
 			float hpProportion = (float)hp / mostHp;
 
 			HpController.SetValue (hpProportion);
+
+			GameObject hitFXPrefab = GameController.Instance.hitFXPrefab;
+			GameObject hitEntity = MonoBehaviour.Instantiate(hitFXPrefab);
+			hitEntity.transform.position = m_Transform.position;
 		}
 	}
 
