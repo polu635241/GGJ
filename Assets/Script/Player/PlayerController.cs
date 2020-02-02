@@ -91,7 +91,7 @@ public class PlayerController : GenericEntityController {
 
 		getPlusSensors.ForEach (plusSensor=>
 			{
-				plusSensor.hasOwner = true;
+				plusSensor.Owner = this;
 				plusSensors.Add(plusSensor,PlusStyle.none);
 			});
 
@@ -105,6 +105,67 @@ public class PlayerController : GenericEntityController {
 		moveFX = this.GetComponentInChildren<ParticleSystem> ();
 
 		moveFX.Stop ();
+
+		PlayerSetting playerSetting = GameController.Instance.PlayerSetting;
+
+		atk = playerSetting.BaseAtk;
+		plusAtk = playerSetting.PlusAtk;
+		injuredProtectedTime = playerSetting.InjuredProtectedTime;
+		hp = playerSetting.Hp;
+		plusHp = playerSetting.PlusHp;
+		enableInjuredTime = 0f;
+	}
+
+	[SerializeField][ReadOnly]
+	int atk;
+
+	[SerializeField][ReadOnly]
+	int plusAtk;
+
+	[SerializeField][ReadOnly]
+	int plusHp;
+
+	[SerializeField][ReadOnly]
+	float injuredProtectedTime;
+
+	[SerializeField][ReadOnly]
+	int hp;
+
+	public int Hp
+	{
+		get
+		{
+			return hp;
+		}
+	}
+
+	[SerializeField][ReadOnly]
+	float enableInjuredTime;
+
+	[SerializeField][Range(0,5)]
+	int playerIndex;
+
+	public int PlayerIndex
+	{
+		get
+		{
+			return playerIndex;
+		}
+	}
+
+	public void Injured(int atk)
+	{
+		if (Time.time > enableInjuredTime)
+		{
+			hp -= atk;
+			enableInjuredTime = Time.time + injuredProtectedTime;
+
+			if (hp <= 0) 
+			{
+				hp = 0;
+				this.enabled = false;
+			}
+		}
 	}
 
 	public Dictionary<Collider,PlusSensor> GetPlusPairs ()
@@ -113,7 +174,7 @@ public class PlayerController : GenericEntityController {
 
 		plusSensors.ForEach ((plusSensor,plusStyle)=>
 			{
-				List<Collider> colls = plusSensor.GetCollider(plusLayerMask.value, plusSensorLayerMask.value);
+				List<Collider> colls = plusSensor.GetCollider(plusLayerMask.value, plusSensorLayerMask.value,this);
 
 				colls.ForEach((coll)=>
 					{
@@ -130,10 +191,22 @@ public class PlayerController : GenericEntityController {
 
 		switch(plusStyle)
 		{
-			case PlusStyle.speed:
+		case PlusStyle.speed:
 			{
 				cacheSpeedCount++;
 				FlushSpeed ();
+				break;
+			}
+
+		case PlusStyle.atk:
+			{
+				atk += plusAtk;
+				break;
+			}
+
+		case PlusStyle.hp:
+			{
+				hp += plusHp;
 				break;
 			}
 		}
