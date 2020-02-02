@@ -65,6 +65,9 @@ public class PlayerController : GenericEntityController {
 		}
 	}
 
+	[SerializeField][ReadOnly]
+	HpController hpController;
+
 	protected override void Awake ()
 	{
 		base.Awake ();
@@ -111,6 +114,8 @@ public class PlayerController : GenericEntityController {
 		hp = playerSetting.Hp;
 		plusHp = playerSetting.PlusHp;
 		enableInjuredTime = 0f;
+
+		hpController = this.GetComponentInChildren<HpController> ();
 	}
 
 	[SerializeField][ReadOnly]
@@ -127,6 +132,14 @@ public class PlayerController : GenericEntityController {
 
 	[SerializeField][ReadOnly]
 	int hp;
+
+	[SerializeField][ReadOnly]
+	int mostHp;
+
+	public void SyncMostHp ()
+	{
+		mostHp = hp;
+	}
 
 	public int Hp
 	{
@@ -181,6 +194,10 @@ public class PlayerController : GenericEntityController {
 				hp = 0;
 				this.enabled = false;
 			}
+
+			float hpProportion = hp / mostHp;
+
+			hpController.SetValue (hpProportion);
 		}
 	}
 
