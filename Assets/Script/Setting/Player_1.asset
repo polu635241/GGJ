@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07830a6d92d50049a6568a2f4a4c2ab, type: 3}
   m_Name: Player_1
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 6
   cachePlusTime: 0.5
   cachePlusFlowTime: 50
   fightFlowTime: 50
@@ -23,7 +23,7 @@ MonoBehaviour:
     type: 3}
   hpFxPrefab: {fileID: 271296185887558188, guid: e60f8bc61478c164497de9060f49e694,
     type: 3}
-  atkFxPrefab: {fileID: 6659227073521994862, guid: c96a515edb8900245a3f8641be1ed430,
+  atkFxPrefab: {fileID: 237628450661086125, guid: 1c3def90034b4214e8b5283541c9e866,
     type: 3}
   fightFxTime: 5
   plusRootFadeOutTime: 3
