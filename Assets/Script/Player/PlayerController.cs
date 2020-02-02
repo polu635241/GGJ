@@ -91,7 +91,7 @@ public class PlayerController : GenericEntityController {
 
 		getPlusSensors.ForEach (plusSensor=>
 			{
-				plusSensor.hasOwner = true;
+				plusSensor.Owner = this;
 				plusSensors.Add(plusSensor,PlusStyle.none);
 			});
 
@@ -113,7 +113,7 @@ public class PlayerController : GenericEntityController {
 
 		plusSensors.ForEach ((plusSensor,plusStyle)=>
 			{
-				List<Collider> colls = plusSensor.GetCollider(plusLayerMask.value, plusSensorLayerMask.value);
+				List<Collider> colls = plusSensor.GetCollider(plusLayerMask.value, plusSensorLayerMask.value,this);
 
 				colls.ForEach((coll)=>
 					{

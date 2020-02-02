@@ -22,14 +22,22 @@ public class PlusSensor : GenericEntityController
 		{
 			return plus;
 		}
+
+		set
+		{
+			plus = value;
+		}
 	}
 
-	public bool hasOwner;
-
-	public void SetOwner(Plus plus)
+	public bool hasOwner
 	{
-		this.plus = plus;
+		get
+		{
+			return Owner != null;
+		}
 	}
+
+	public PlayerController Owner = null;
 
 	[SerializeField]
 	SensorStyle sensorStyle = SensorStyle.Peace;
@@ -45,17 +53,17 @@ public class PlusSensor : GenericEntityController
 	[SerializeField]
 	Transform proxy;
 	
-	public List<Collider> GetCollider (int plusMask, int plusSensorMask)
+	public List<Collider> GetCollider (int plusMask, int plusSensorMask, PlayerController owner)
 	{
 		Vector3 center = m_Transform.position;
 		Vector3 halfExtents = Tool.MultiV3 (m_Collider.size / 2, m_Transform.localScale);
 
 		Collider[] plusSensorColls = Physics.OverlapBox (center, halfExtents, m_Transform.rotation, plusSensorMask);
 
-		return ProcessColls (plusSensorColls);
+		return ProcessColls (plusSensorColls, owner);
 	}
 
-	List<Collider> ProcessColls(Collider[] plusSensorColls)
+	List<Collider> ProcessColls (Collider[] plusSensorColls, PlayerController owner)
 	{
 		List<Collider> processColls = new List<Collider> ();
 		
@@ -70,7 +78,7 @@ public class PlusSensor : GenericEntityController
 
 					foreach (var bindPlusSensor in bindPlusSensors) 
 					{
-						bindPlusSensor.hasOwner = true;
+						bindPlusSensor.Owner = owner;
 					}
 
 					bool checkResult = Check(this.sensorStyle, plusSensor.SensorStyle);

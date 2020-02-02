@@ -10,7 +10,7 @@ public class Plus : MonoBehaviour
 
 		foreach (PlusSensor plusSensor in plusSensors) 
 		{
-			plusSensor.SetOwner (this);
+			plusSensor.Plus = this;
 		}
 	}
 	
