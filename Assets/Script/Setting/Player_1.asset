@@ -25,6 +25,7 @@ MonoBehaviour:
     type: 3}
   atkFxPrefab: {fileID: 2074185463804129306, guid: 4df62282b467e324f826eefcc5e74f7f,
     type: 3}
-  fightFxTime: 0
+  fightFxTime: 5
   plusRootFadeOutTime: 3
   plusRootDeltaY: -10
+  rotTime: 0.5

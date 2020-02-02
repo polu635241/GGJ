@@ -37,6 +37,11 @@ public class PlayerRunState : PlayerFlowState {
 
 			Vector3 processMoveVelocity = moveVelocity * moveSpeed;
 			PlayerController.SetVelocity (processMoveVelocity);
+
+			if (GameController.GameFlow == GameFlow.Fight) 
+			{
+				PlayerController.SetTargetRot (degree);
+			}
 		}
 		else
 		{
