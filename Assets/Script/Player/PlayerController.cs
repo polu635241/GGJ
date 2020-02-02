@@ -112,6 +112,8 @@ public class PlayerController : GenericEntityController {
 		plusAtk = playerSetting.PlusAtk;
 		injuredProtectedTime = playerSetting.InjuredProtectedTime;
 		hp = playerSetting.Hp;
+		plusHp = playerSetting.PlusHp;
+		enableInjuredTime = 0f;
 	}
 
 	[SerializeField][ReadOnly]
@@ -121,10 +123,50 @@ public class PlayerController : GenericEntityController {
 	int plusAtk;
 
 	[SerializeField][ReadOnly]
+	int plusHp;
+
+	[SerializeField][ReadOnly]
 	float injuredProtectedTime;
 
 	[SerializeField][ReadOnly]
 	int hp;
+
+	public int Hp
+	{
+		get
+		{
+			return hp;
+		}
+	}
+
+	[SerializeField][ReadOnly]
+	float enableInjuredTime;
+
+	[SerializeField][Range(0,5)]
+	int playerIndex;
+
+	public int PlayerIndex
+	{
+		get
+		{
+			return playerIndex;
+		}
+	}
+
+	public void Injured(int atk)
+	{
+		if (Time.time > enableInjuredTime)
+		{
+			hp -= atk;
+			enableInjuredTime = Time.time + injuredProtectedTime;
+
+			if (hp <= 0) 
+			{
+				hp = 0;
+				this.enabled = false;
+			}
+		}
+	}
 
 	public Dictionary<Collider,PlusSensor> GetPlusPairs ()
 	{
@@ -149,10 +191,22 @@ public class PlayerController : GenericEntityController {
 
 		switch(plusStyle)
 		{
-			case PlusStyle.speed:
+		case PlusStyle.speed:
 			{
 				cacheSpeedCount++;
 				FlushSpeed ();
+				break;
+			}
+
+		case PlusStyle.atk:
+			{
+				atk += plusAtk;
+				break;
+			}
+
+		case PlusStyle.hp:
+			{
+				hp += plusHp;
 				break;
 			}
 		}

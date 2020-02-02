@@ -35,3 +35,4 @@ MonoBehaviour:
   baseAtk: 10
   plusAtk: 20
   hp: 100
+  plusHp: 30

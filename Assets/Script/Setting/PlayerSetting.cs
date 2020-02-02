@@ -225,4 +225,15 @@ public class PlayerSetting : ScriptableObject
 
 	[SerializeField]
 	int hp;
+
+	public int PlusHp
+	{
+		get
+		{
+			return plusHp;
+		}
+	}
+
+	[SerializeField]
+	int plusHp;
 }
