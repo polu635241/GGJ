@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   cachePlusTime: 0.5
-  cachePlusFlowTime: 30
-  fightFlowTime: 30
+  cachePlusFlowTime: 50
+  fightFlowTime: 50
   reduceSpeedScale: 0.08
   plusSpeedScale: 0.18
   keepSpeedScale: 0.5

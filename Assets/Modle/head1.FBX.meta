@@ -6,10 +6,17 @@ ModelImporter:
     100000: //RootNode
     400000: //RootNode
     2100000: head_palette
+    2100002: head1_palette
     2300000: //RootNode
     3300000: //RootNode
     4300000: head
+    4300002: head1
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: head1_palette
+    second: {fileID: 2100000, guid: b24c1e5faeb83fa47ae836bc91687347, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

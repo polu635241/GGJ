@@ -9,7 +9,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: head3
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: head3_palette
+    second: {fileID: 2100000, guid: b24c1e5faeb83fa47ae836bc91687347, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
