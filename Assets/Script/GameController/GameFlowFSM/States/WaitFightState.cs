@@ -51,7 +51,7 @@ public class WaitFightState : GameFlowState
 		for (int i = 0; i < flowController.playerControllers.Count; i++) 
 		{
 			PlayerController playerController = flowController.playerControllers [i];
-
+			playerController.SyncMostHp ();
 			flowController.hpEntitys [i].position = playerController.transform.position;
 			flowController.hpEntitys [i].gameObject.SetActive (true);
 		}
